@@ -1,102 +1,86 @@
 import { useEffect, useState } from "react";
-import styled from 'styled-components';
-import api from '../servicos/api';
-import { iniciarLeitura, finalizarLeitura } from '../servicos/livros';
+import styled from "styled-components";
+import api from "../servicos/api";
+import { iniciarLeitura, finalizarLeitura } from "../servicos/livros";
+import { PageShell, PageSection, SurfaceCard, PrimaryButton, SecondaryButton } from "../componentes/ui";
+import { colors } from "../styles/theme";
 
-const AppContainer = styled.div`
-  width: 100vw;
-  min-height: 100vh;
-  background-image: linear-gradient(90deg,#002F52 35%,#326589 165%);
-  padding: 40px 20px;
-`
+const Wrapper = styled(PageSection)`
+  padding: 40px 0 56px;
+`;
 
-const Titulo = styled.h2`
-  color: #FFF;
-  font-size: 36px;
+const Title = styled.h1`
+  margin: 0 0 28px;
   text-align: center;
-  width: 100%;
-  margin-bottom: 30px;
-`
+  font-size: clamp(30px, 4vw, 44px);
+  letter-spacing: -0.04em;
+`;
 
 const Secao = styled.section`
-  margin-bottom: 50px;
-`
+  margin-bottom: 40px;
+`;
 
-const SecaoTitulo = styled.h3`
-  color: #FFF;
-  font-size: 24px;
-  margin-bottom: 20px;
-  padding-left: 20px;
-`
+const SecaoTitulo = styled.h2`
+  color: ${colors.text};
+  font-size: 22px;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+`;
 
 const LivrosGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+`;
 
-const LivroCard = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+const LivroCard = styled(SurfaceCard)`
   padding: 20px;
-  width: 250px;
   text-align: center;
-  color: #fff;
-  
+
   img {
-    width: 150px;
-    height: 200px;
+    width: 100%;
+    height: 260px;
     object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    border-radius: 16px;
+    margin-bottom: 14px;
   }
-  
+
   h4 {
     font-size: 18px;
     margin: 10px 0;
-    color: #fff;
+    color: ${colors.text};
   }
-  
+
   p {
     font-size: 14px;
-    color: #ddd;
+    color: ${colors.muted};
     margin-bottom: 15px;
   }
-`
+`;
 
-const Botao = styled.button`
-  background-color: #cd76cc;
-  color: #111011;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  margin: 5px;
-  
-  &:hover {
-    background-color: #d14ccf;
-  }
-`
+const Empty = styled.p`
+  color: ${colors.muted};
+  margin: 0;
+`;
 
 function EstanteLivros() {
   const [estante, setEstante] = useState({
     favoritos: [],
     lendo: [],
     lidos: [],
-    queroLer: []
+    queroLer: [],
   });
   const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState("");
 
   async function carregarEstante() {
     try {
       setLoading(true);
-      const response = await api.get('/estante');
+      setErro("");
+      const response = await api.get("/estante");
       setEstante(response.data);
     } catch (err) {
-      alert('Erro ao carregar estante');
-      console.error(err);
+      setErro("Erro ao carregar estante.");
     } finally {
       setLoading(false);
     }
@@ -105,20 +89,18 @@ function EstanteLivros() {
   async function handleIniciarLeitura(livroId) {
     try {
       await iniciarLeitura(livroId);
-      alert('Leitura iniciada! Evento criado no Google Calendar.');
-      carregarEstante(); // Recarrega a estante
+      carregarEstante();
     } catch (err) {
-      alert(err.response?.data?.mensagem || 'Erro ao iniciar leitura');
+      setErro(err.response?.data?.mensagem || "Erro ao iniciar leitura.");
     }
   }
 
   async function handleFinalizarLeitura(livroId) {
     try {
-      const resultado = await finalizarLeitura(livroId);
-      alert(`Leitura finalizada! Tempo total: ${resultado.tempoTotal} minutos`);
-      carregarEstante(); // Recarrega a estante
+      await finalizarLeitura(livroId);
+      carregarEstante();
     } catch (err) {
-      alert(err.response?.data?.mensagem || 'Erro ao finalizar leitura');
+      setErro(err.response?.data?.mensagem || "Erro ao finalizar leitura.");
     }
   }
 
@@ -128,104 +110,105 @@ function EstanteLivros() {
 
   if (loading) {
     return (
-      <AppContainer>
-        <Titulo>Carregando estante...</Titulo>
-      </AppContainer>
+      <PageShell>
+        <Wrapper>
+          <Title>Carregando estante...</Title>
+        </Wrapper>
+      </PageShell>
     );
   }
 
   return (
-    <AppContainer>
-      <Titulo>Minha Estante</Titulo>
+    <PageShell>
+      <Wrapper>
+        <Title>Minha estante</Title>
+        {erro && <p style={{ color: colors.danger, textAlign: "center" }}>{erro}</p>}
 
-      {/* Favoritos */}
-      <Secao>
-        <SecaoTitulo>⭐ Favoritos</SecaoTitulo>
-        <LivrosGrid>
-          {estante.favoritos.length > 0 ? (
-            estante.favoritos.map(livro => (
-              <LivroCard key={livro._id}>
-                {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
-                <h4>{livro.titulo}</h4>
-                <p>{livro.autores?.join(', ') || 'Autor desconhecido'}</p>
-                {livro.statusLeitura !== "lendo" && livro.statusLeitura !== "lido" && (
-                  <Botao onClick={() => handleIniciarLeitura(livro._id)}>
+        <Secao>
+          <SecaoTitulo>Favoritos</SecaoTitulo>
+          <LivrosGrid>
+            {estante.favoritos.length > 0 ? (
+              estante.favoritos.map((livro) => (
+                <LivroCard key={livro._id}>
+                  {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
+                  <h4>{livro.titulo}</h4>
+                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  {livro.statusLeitura !== "lendo" && livro.statusLeitura !== "lido" && (
+                    <PrimaryButton type="button" onClick={() => handleIniciarLeitura(livro._id)}>
+                      Iniciar leitura
+                    </PrimaryButton>
+                  )}
+                </LivroCard>
+              ))
+            ) : (
+              <Empty>Nenhum favorito ainda.</Empty>
+            )}
+          </LivrosGrid>
+        </Secao>
+
+        <Secao>
+          <SecaoTitulo>Lendo</SecaoTitulo>
+          <LivrosGrid>
+            {estante.lendo.length > 0 ? (
+              estante.lendo.map((livro) => (
+                <LivroCard key={livro._id}>
+                  {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
+                  <h4>{livro.titulo}</h4>
+                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  <SecondaryButton type="button" onClick={() => handleFinalizarLeitura(livro._id)}>
+                    Finalizar leitura
+                  </SecondaryButton>
+                </LivroCard>
+              ))
+            ) : (
+              <Empty>Nenhum livro sendo lido no momento.</Empty>
+            )}
+          </LivrosGrid>
+        </Secao>
+
+        <Secao>
+          <SecaoTitulo>Lidos</SecaoTitulo>
+          <LivrosGrid>
+            {estante.lidos.length > 0 ? (
+              estante.lidos.map((livro) => (
+                <LivroCard key={livro._id}>
+                  {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
+                  <h4>{livro.titulo}</h4>
+                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  {livro.dataFimLeitura && (
+                    <p style={{ fontSize: 12, color: colors.subtle }}>
+                      Finalizado em: {new Date(livro.dataFimLeitura).toLocaleDateString("pt-BR")}
+                    </p>
+                  )}
+                </LivroCard>
+              ))
+            ) : (
+              <Empty>Nenhum livro lido ainda.</Empty>
+            )}
+          </LivrosGrid>
+        </Secao>
+
+        <Secao>
+          <SecaoTitulo>Quero ler</SecaoTitulo>
+          <LivrosGrid>
+            {estante.queroLer.length > 0 ? (
+              estante.queroLer.map((livro) => (
+                <LivroCard key={livro._id}>
+                  {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
+                  <h4>{livro.titulo}</h4>
+                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  <PrimaryButton type="button" onClick={() => handleIniciarLeitura(livro._id)}>
                     Iniciar leitura
-                  </Botao>
-                )}
-              </LivroCard>
-            ))
-          ) : (
-            <p style={{ color: '#fff' }}>Nenhum favorito ainda</p>
-          )}
-        </LivrosGrid>
-      </Secao>
-
-      {/* Lendo */}
-      <Secao>
-        <SecaoTitulo>📖 Lendo</SecaoTitulo>
-        <LivrosGrid>
-          {estante.lendo.length > 0 ? (
-            estante.lendo.map(livro => (
-              <LivroCard key={livro._id}>
-                {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
-                <h4>{livro.titulo}</h4>
-                <p>{livro.autores?.join(', ') || 'Autor desconhecido'}</p>
-                <Botao onClick={() => handleFinalizarLeitura(livro._id)}>
-                  Finalizar leitura
-                </Botao>
-              </LivroCard>
-            ))
-          ) : (
-            <p style={{ color: '#fff' }}>Nenhum livro sendo lido no momento</p>
-          )}
-        </LivrosGrid>
-      </Secao>
-
-      {/* Lidos */}
-      <Secao>
-        <SecaoTitulo>✅ Lidos</SecaoTitulo>
-        <LivrosGrid>
-          {estante.lidos.length > 0 ? (
-            estante.lidos.map(livro => (
-              <LivroCard key={livro._id}>
-                {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
-                <h4>{livro.titulo}</h4>
-                <p>{livro.autores?.join(', ') || 'Autor desconhecido'}</p>
-                {livro.dataFimLeitura && (
-                  <p style={{ fontSize: '12px', color: '#aaa' }}>
-                    Finalizado em: {new Date(livro.dataFimLeitura).toLocaleDateString('pt-BR')}
-                  </p>
-                )}
-              </LivroCard>
-            ))
-          ) : (
-            <p style={{ color: '#fff' }}>Nenhum livro lido ainda</p>
-          )}
-        </LivrosGrid>
-      </Secao>
-
-      {/* Quero Ler */}
-      <Secao>
-        <SecaoTitulo>📚 Quero Ler</SecaoTitulo>
-        <LivrosGrid>
-          {estante.queroLer.length > 0 ? (
-            estante.queroLer.map(livro => (
-              <LivroCard key={livro._id}>
-                {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
-                <h4>{livro.titulo}</h4>
-                <p>{livro.autores?.join(', ') || 'Autor desconhecido'}</p>
-                <Botao onClick={() => handleIniciarLeitura(livro._id)}>
-                  Iniciar leitura
-                </Botao>
-              </LivroCard>
-            ))
-          ) : (
-            <p style={{ color: '#fff' }}>Nenhum livro na lista "Quero Ler"</p>
-          )}
-        </LivrosGrid>
-      </Secao>
-    </AppContainer>
+                  </PrimaryButton>
+                </LivroCard>
+              ))
+            ) : (
+              <Empty>Nenhum livro na lista Quero Ler.</Empty>
+            )}
+          </LivrosGrid>
+        </Secao>
+      </Wrapper>
+    </PageShell>
   );
 }
 

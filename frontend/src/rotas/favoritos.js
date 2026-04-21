@@ -2,53 +2,46 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { deleteFavorito, getFavoritos } from "../servicos/favoritos";
 import livroImg from "../componentes/imagens/livro.png";
+import { PageShell, PageSection, SurfaceCard, PrimaryButton, SecondaryButton } from "../componentes/ui";
+import { colors } from "../styles/theme";
 
-const AppContainer = styled.div`
-  width: 100vw;
-  min-height: 100vh;
-  background-image: linear-gradient(90deg, #002F52 35%, #326589 165%);
+const Wrapper = styled(PageSection)`
+  padding: 40px 0 56px;
+`;
+
+const Title = styled.h1`
+  margin: 0 0 28px;
+  text-align: center;
+  font-size: clamp(30px, 4vw, 44px);
+  letter-spacing: -0.04em;
 `;
 
 const ResultadoContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
 `;
 
-const Resultado = styled.button`
+const Resultado = styled(SurfaceCard)`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin: 20px 0;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
   text-align: left;
-  padding: 16px 28px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-
-  p {
-    width: 200px;
-    margin: 0;
-  }
-
-  img {
-    width: 88px;
-  }
-
-  &:hover {
-    border-color: white;
-  }
+  color: ${colors.text};
 `;
 
-const Titulo = styled.h2`
-  color: #FFF;
-  font-size: 36px;
-  text-align: center;
+const Capa = styled.img`
   width: 100%;
-  padding-top: 35px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 16px;
+`;
+
+const Empty = styled(SurfaceCard)`
+  padding: 28px;
+  text-align: center;
+  color: ${colors.muted};
 `;
 
 function Favoritos() {
@@ -83,24 +76,29 @@ function Favoritos() {
   }, []);
 
   return (
-    <AppContainer>
-      <div>
-        <Titulo>Aqui estao seus livros favoritos:</Titulo>
-        {erro && <p style={{ color: "#ffb3b3", textAlign: "center" }}>{erro}</p>}
-        {carregando && <p style={{ color: "#fff", textAlign: "center" }}>Carregando favoritos...</p>}
-        <ResultadoContainer>
-          {!carregando && favoritos.length === 0 && (
-            <p style={{ color: "#fff" }}>Nenhum favorito salvo ainda.</p>
-          )}
-          {favoritos.map((favorito) => (
-            <Resultado key={favorito._id} type="button" onClick={() => deletaFavorito(favorito._id)}>
-              <p>{favorito.titulo}</p>
-              <img src={favorito.thumbnail || livroImg} alt={`Capa de ${favorito.titulo}`} />
-            </Resultado>
-          ))}
-        </ResultadoContainer>
-      </div>
-    </AppContainer>
+    <PageShell>
+      <Wrapper>
+        <Title>Livros favoritos</Title>
+        {erro && <p style={{ color: colors.danger, textAlign: "center" }}>{erro}</p>}
+        {carregando && <p style={{ color: colors.muted, textAlign: "center" }}>Carregando favoritos...</p>}
+
+        {!carregando && favoritos.length === 0 ? (
+          <Empty>Você ainda não salvou nenhum favorito.</Empty>
+        ) : (
+          <ResultadoContainer>
+            {favoritos.map((favorito) => (
+              <Resultado key={favorito._id}>
+                <Capa src={favorito.thumbnail || livroImg} alt={`Capa de ${favorito.titulo}`} />
+                <h2 style={{ margin: 0, fontSize: 18 }}>{favorito.titulo}</h2>
+                <SecondaryButton type="button" onClick={() => deletaFavorito(favorito._id)}>
+                  Remover
+                </SecondaryButton>
+              </Resultado>
+            ))}
+          </ResultadoContainer>
+        )}
+      </Wrapper>
+    </PageShell>
   );
 }
 
