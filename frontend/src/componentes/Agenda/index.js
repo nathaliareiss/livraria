@@ -1,4 +1,16 @@
+import styled from "styled-components";
 import api from "../../servicos/api";
+import { colors } from "../../styles/theme";
+
+const Button = styled.button`
+  border: 1px solid ${colors.border};
+  background: ${colors.surface};
+  color: ${colors.text};
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+`;
 
 function Agenda() {
   async function conectarGoogle() {
@@ -12,7 +24,9 @@ function Agenda() {
 
   return (
     <div className="calendario">
-      <button onClick={conectarGoogle}>Conectar Google Agenda</button>
+      <Button type="button" onClick={conectarGoogle}>
+        Conectar Google Agenda
+      </Button>
     </div>
   );
 }

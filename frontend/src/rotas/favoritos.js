@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { deleteFavorito, getFavoritos } from "../servicos/favoritos";
 import livroImg from "../componentes/imagens/livro.png";
-import { PageShell, PageSection, SurfaceCard, PrimaryButton, SecondaryButton } from "../componentes/ui";
+import { PageShell, PageSection, SurfaceCard, SecondaryButton } from "../componentes/ui";
 import { colors } from "../styles/theme";
 
 const Wrapper = styled(PageSection)`

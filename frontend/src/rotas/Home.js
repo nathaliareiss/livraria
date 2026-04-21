@@ -4,7 +4,7 @@ import api from "../servicos/api";
 import Pesquisa from "../componentes/Pesquisa";
 import UltimosLancamentos from "../componentes/ultimoslancamentos";
 import { adicionarLivro, alternarFavorito, alternarQueroLer, iniciarLeitura } from "../servicos/livros";
-import { PageShell, PageSection, SurfaceCard } from "../componentes/ui";
+import { PageShell, SurfaceCard } from "../componentes/ui";
 import { colors } from "../styles/theme";
 
 const Content = styled.div`
