@@ -1,15 +1,22 @@
 import perfil from "../imagens/perfil.png";
 import sacola from "../imagens/sacola.png";
 import styled from "styled-components";
+import { colors } from "../../styles/theme";
 
 const Icone = styled.li`
-  margin-right: 40px;
-  width: 25px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid ${colors.border};
+  background: ${colors.surfaceAlt};
 `;
 
 const Icones = styled.ul`
   display: flex;
   align-items: center;
+  gap: 10px;
 `;
 
 const icones = [
@@ -22,7 +29,7 @@ function IconesHeader() {
     <Icones>
       {icones.map((icone) => (
         <Icone key={icone.alt}>
-          <img src={icone.src} alt={icone.alt} />
+          <img src={icone.src} alt={icone.alt} width="20" height="20" />
         </Icone>
       ))}
     </Icones>

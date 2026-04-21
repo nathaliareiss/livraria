@@ -1,4 +1,23 @@
+import styled from "styled-components";
 import api from "../../servicos/api";
+import { colors } from "../../styles/theme";
+
+const Button = styled.button`
+  border: 1px solid ${colors.border};
+  background: ${colors.surface};
+  color: ${colors.text};
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+
+  &:hover {
+    background: ${colors.primarySoft};
+    color: ${colors.primaryHover};
+    transform: translateY(-1px);
+  }
+`;
 
 function DesconectarGoogle({ className, onDesconectado }) {
   const desconectar = async () => {
@@ -6,7 +25,6 @@ function DesconectarGoogle({ className, onDesconectado }) {
       const res = await api.delete("/auth/google");
 
       if (res.status >= 200 && res.status < 300) {
-        alert("Google desconectado com sucesso");
         onDesconectado?.();
       }
     } catch (error) {
@@ -15,9 +33,9 @@ function DesconectarGoogle({ className, onDesconectado }) {
   };
 
   return (
-    <button className={className} onClick={desconectar} style={{ background: "red", color: "white" }}>
+    <Button className={className} type="button" onClick={desconectar}>
       Desconectar Google Calendar
-    </button>
+    </Button>
   );
 }
 

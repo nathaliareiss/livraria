@@ -1,63 +1,73 @@
-import styled from "styled-components"
-import { Titulo } from "../titulo"
+import styled from "styled-components";
+import { Titulo } from "../titulo";
+import { colors } from "../../styles/theme";
 
 const Card = styled.div`
-    align-items: center;
-    background-color: #FFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    display: flex;
-    margin: 0 auto;
-    max-width: 600px;
-    padding: 25px 20px;
-    justify-content: space-around;
-    width: 100%;  
-`
+  align-items: center;
+  background: ${colors.surface};
+  border: 1px solid ${colors.border};
+  box-shadow: ${colors.shadowSoft};
+  border-radius: 24px;
+  display: flex;
+  gap: 24px;
+  margin: 0 auto;
+  max-width: 760px;
+  padding: 28px;
+  justify-content: space-between;
+  width: 100%;
+`;
 
 const Botao = styled.button`
-    background-color: #EB9B00;
-    color: #FFF;
-    padding: 10px 0px;
-    font-size: 16px;
-    border: none;
-    font-weight: 900;
-    display: block;
-    text-align: center;
-    width: 150px;
-    &:hover {
-    cursor: pointer;
-    }
-`
+  background-color: ${colors.primary};
+  color: #fff;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${colors.primaryHover};
+  }
+`;
 
 const Descricao = styled.p`
-    max-width: 300px;
-`
+  max-width: 340px;
+  color: ${colors.muted};
+  line-height: 1.6;
+`;
 
 const Subtitulo = styled.h4`
-    color: #002F52;
-    font-size: 18px;
-    font-weight: bold;
-    margin: 15px 0;
-`
+  color: ${colors.text};
+  font-size: 18px;
+  font-weight: 800;
+  margin: 15px 0;
+`;
 
 const ImgLivro = styled.img`
-    width: 150px;
-`
+  width: 150px;
+  border-radius: 16px;
+`;
 
-function CardRecomenda({titulo, subtitulo, descricao, img}) {
-    return (
-        <Card>
-            <div>
-                <Titulo tamanhoFonte="16px" cor="#EB9B00" alinhamento="left">{titulo}</Titulo>
-                <Subtitulo>{subtitulo}</Subtitulo>
-                <Descricao>{descricao}</Descricao>
-            </div>
-            <div>
-                <ImgLivro src={img}/>
-                <Botao>Saiba mais</Botao>
-            </div>
-        </Card>  
-    )
+function CardRecomenda({ titulo, subtitulo, descricao, img }) {
+  return (
+    <Card>
+      <div>
+        <Titulo tamanhoFonte="16px" cor={colors.primary} alinhamento="left">{titulo}</Titulo>
+        <Subtitulo>{subtitulo}</Subtitulo>
+        <Descricao>{descricao}</Descricao>
+      </div>
+      <div>
+        <ImgLivro src={img} alt={titulo} />
+        <Botao>Saiba mais</Botao>
+      </div>
+    </Card>
+  );
 }
 
-export default CardRecomenda
+export default CardRecomenda;

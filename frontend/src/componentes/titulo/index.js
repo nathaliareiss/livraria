@@ -1,12 +1,12 @@
 import styled from "styled-components";
-
+import { colors } from "../../styles/theme";
 
 export const Titulo = styled.h2`
-    width: 100%;
-    padding: 30px 0;
-    background-color: #FFF;
-    color:${props=> props.cor || '#EB9B00'}
-    font-size: 36px;
-    text-align: center;
-    margin: 0;
-`
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: ${(props) => props.cor || colors.text};
+  font-size: ${(props) => props.tamanhoFonte || "36px"};
+  text-align: ${(props) => props.alinhamento || "center"};
+  letter-spacing: -0.04em;
+`;
