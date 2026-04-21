@@ -1,24 +1,24 @@
 # Livraria
 
-Aplicacao full stack para gerenciamento de livros, favoritos, estante pessoal e integracao com Google Calendar.
+A polished full-stack book management app with favorites, a personal library, reading tracking, and Google Calendar integration.
 
-## Stack
+## Tech Stack
 
 - Backend: Node.js, Express, MongoDB, Mongoose, JWT, bcrypt, Google APIs
 - Frontend: React, React Router, styled-components, Axios
 
-## Estrutura
+## Project Structure
 
-- `backend/`: API, autenticacao, modelos e integracoes
-- `frontend/`: interface web e consumo da API
-- `livros.json` e `favoritos.json`: arquivos locais de apoio / dados de teste
+- `backend/`: API, authentication, models, and integrations
+- `frontend/`: web interface and API consumption
+- `livros.json` and `favoritos.json`: local seed/support data
 
-## Como rodar localmente
+## Local Setup
 
-1. Instale as dependencias do backend e do frontend.
-2. Configure os arquivos de ambiente com base nos exemplos.
-3. Inicie o backend em uma porta como `8000`.
-4. Inicie o frontend em `3000`.
+1. Install dependencies in both `backend` and `frontend`.
+2. Copy the example environment files.
+3. Start the backend on port `8000`.
+4. Start the frontend on port `3000`.
 
 ### Backend
 
@@ -36,24 +36,24 @@ npm install
 npm start
 ```
 
-## Variaveis de ambiente
+## Environment Variables
 
-Copie os arquivos de exemplo:
+Copy the example files:
 
-- `backend/.env.example` para `backend/.env`
-- `frontend/.env.example` para `frontend/.env`
+- `backend/.env.example` to `backend/.env`
+- `frontend/.env.example` to `frontend/.env`
 
-## Melhorias implementadas
+## Highlights
 
-- Favoritos persistidos no MongoDB por usuario
-- Fluxo do Google Calendar sem token na URL
-- URLs configuraveis por ambiente
-- Remocao de logs e caminho de teste da rota principal
-- Ajustes de acessibilidade e warnings do React
+- User-specific favorites persisted in MongoDB
+- Google Calendar flow without exposing tokens in the URL
+- Environment-based API and frontend URLs
+- Cleaner production-ready frontend visual system
+- Accessibility and build warnings addressed
 
-## Proximos passos recomendados
+## Next Improvements
 
-- Adicionar testes automatizados
-- Criar pipeline de lint e build
-- Publicar screenshots e video/gif no README
-- Separar melhor camadas de servico e componentes no frontend
+- Add automated tests for critical flows
+- Add a CI workflow for linting and build validation
+- Include screenshots or a short demo video
+- Add deployment notes for the backend and frontend

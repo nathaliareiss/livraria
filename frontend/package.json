@@ -2,6 +2,7 @@
   "name": "livraria-frontend",
   "version": "0.1.0",
   "private": true,
+  "description": "React frontend for the Livraria project.",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

@@ -1,7 +1,7 @@
 {
   "name": "livraria-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Book library backend with authentication, favorites, and Google Calendar integration.",
   "main": "index.js",
   "type": "module",
   "scripts": {
