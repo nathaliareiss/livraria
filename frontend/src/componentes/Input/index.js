@@ -1,17 +1,25 @@
 import styled from "styled-components";
-
+import { colors } from "../../styles/theme";
 
 const Input = styled.input`
-    
-   flex: 1;                  /* ocupa o espaço disponível */
-  border: none;             /* remove a borda padrão */
-  background: transparent;  /* deixa transparente */
-  outline: none;            /* remove a borda azul ao clicar */
-  font-size: 14px;
-  color: #e998cb;              /* cor do texto digitado */
-  padding: 7px;
-`
+  width: 100%;
+  border: 1px solid ${colors.border};
+  background: ${colors.surface};
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: ${colors.text};
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
 
+  &::placeholder {
+    color: ${colors.subtle};
+  }
 
+  &:focus {
+    border-color: ${colors.primary};
+    box-shadow: 0 0 0 4px ${colors.primarySoft};
+  }
+`;
 
-export default Input
+export default Input;

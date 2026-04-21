@@ -1,26 +1,29 @@
-import logo from '../imagens/logo.png'
-import styled from 'styled-components'
-
+import logo from "../imagens/logo.png";
+import styled from "styled-components";
+import { colors } from "../../styles/theme";
 
 const LogoContainer = styled.div`
-    display: flex;
-    font-size:30px;
-`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: ${colors.text};
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+`;
+
 const LogoImage = styled.img`
-    margin-right: 5px;
-`
+  width: 38px;
+  height: 38px;
+`;
 
-function Logo(){
-    return(
-        <LogoContainer>
-             <LogoImage
-             src={logo} 
-             alt='logo'
-             />
-              <p><strong>Nathalia</strong>Books</p>
-       </LogoContainer>
-
-    )
+function Logo() {
+  return (
+    <LogoContainer>
+      <LogoImage src={logo} alt="Livraria" />
+      <p><strong>Nathalia</strong>Books</p>
+    </LogoContainer>
+  );
 }
 
-export default Logo
+export default Logo;

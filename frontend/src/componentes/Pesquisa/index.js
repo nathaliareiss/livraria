@@ -1,55 +1,62 @@
 import styled from "styled-components";
 import Input from "../Input";
 import { useState } from "react";
+import { colors } from "../../styles/theme";
+import { PageSection } from "../ui";
 
 const PesquisaContainer = styled.section`
-  background-image: linear-gradient(90deg, #002F52 35%, #326589 165%);
-  color: #FFF;
-  text-align: center;
-  padding: 85px 0;
-  height: 270px;
-  width: 100%;
+  padding: 28px 0 16px;
+`;
+
+const Hero = styled(PageSection)`
+  padding: 40px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, ${colors.surfaceDark} 0%, ${colors.surfaceDarkAlt} 100%);
+  box-shadow: ${colors.shadow};
+  color: #fff;
 `;
 
 const Titulo = styled.h2`
-  color: #FFF;
-  font-size: 36px;
-  text-align: center;
-  width: 100%;
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: clamp(32px, 4vw, 52px);
+  letter-spacing: -0.04em;
 `;
 
 const Subtitulo = styled.h3`
-  font-size: 16px;
+  margin: 0 0 28px;
+  max-width: 680px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 17px;
   font-weight: 500;
-  margin-bottom: 40px;
+  line-height: 1.6;
 `;
 
 const SearchBar = styled.div`
   display: flex;
-  justify-content: center;
-  margin: 10px 0;
+  justify-content: flex-start;
 `;
 
 const Form = styled.form`
   display: flex;
+  gap: 12px;
+  width: min(100%, 680px);
   align-items: center;
-  background: transparent;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  padding: 5px 10px;
-  width: 250px;
 `;
 
 const SearchButton = styled.button`
-  background-color: #cd76cc;
-  color: #111011;
-  border: none;
-  padding: 5px;
-  border-radius: 17px;
+  background-color: ${colors.primary};
+  color: #fff;
+  border: 1px solid transparent;
+  padding: 14px 18px;
+  border-radius: 14px;
   cursor: pointer;
+  font-weight: 700;
+  transition: background 160ms ease, transform 160ms ease;
 
   &:hover {
-    background-color: #d14ccf;
+    background-color: ${colors.primaryHover};
+    transform: translateY(-1px);
   }
 `;
 
@@ -65,20 +72,24 @@ function Pesquisa({ onBuscar }) {
 
   return (
     <PesquisaContainer>
-      <Titulo>Por onde comecar?</Titulo>
-      <Subtitulo>Encontre seu livro em nossa estante</Subtitulo>
+      <Hero>
+        <Titulo>Explore livros com uma experiência limpa e objetiva.</Titulo>
+        <Subtitulo>
+          Busque títulos, organize sua estante, salve favoritos e acompanhe suas leituras em um layout pensado para clareza e profissionalismo.
+        </Subtitulo>
 
-      <SearchBar>
-        <Form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            placeholder="Busque um livro"
-            value={valor}
-            onChange={(e) => setValor(e.target.value)}
-          />
-          <SearchButton type="submit">Pesquisar</SearchButton>
-        </Form>
-      </SearchBar>
+        <SearchBar>
+          <Form onSubmit={handleSubmit}>
+            <Input
+              type="text"
+              placeholder="Busque um livro"
+              value={valor}
+              onChange={(e) => setValor(e.target.value)}
+            />
+            <SearchButton type="submit">Pesquisar</SearchButton>
+          </Form>
+        </SearchBar>
+      </Hero>
     </PesquisaContainer>
   );
 }

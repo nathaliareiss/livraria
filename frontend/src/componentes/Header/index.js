@@ -1,38 +1,52 @@
-import OpcoesHeader from '../OpcoesHeader';
-import IconesHeader from '../iconesHeader';
-import Logo from '../Logo';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-
-
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import OpcoesHeader from "../OpcoesHeader";
+import IconesHeader from "../iconesHeader";
+import Logo from "../Logo";
+import { PageSection } from "../ui";
+import { colors } from "../../styles/theme";
 
 const HeaderContainer = styled.header`
-  background-color: rgb(181, 155, 184);
-  display:flex;
-  justify-content:center
-`
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(219, 227, 238, 0.9);
+`;
 
-// Pra fazer com que quando clicarmos na logo que fica no cabecalho
-// volte para a pagina inicial, colocamos a logo dentro de 
-// link do react router dom lembrando de colocar o to para indicar
-// para onde ele vai redirecionar
+const HeaderInner = styled(PageSection)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 78px;
+`;
 
+const BrandLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  border-radius: 16px;
 
-function Header(){
-    return(
-    <div className='App' >
-     <HeaderContainer>
-      <Link to="/">
-        <Logo/>
-      </Link>
-      
-         <OpcoesHeader/>
-         <IconesHeader/>
+  &:focus-visible {
+    outline: 3px solid ${colors.primarySoft};
+    outline-offset: 4px;
+  }
+`;
 
-      </HeaderContainer>
-    </div>
-    )
+function Header() {
+  return (
+    <HeaderContainer>
+      <HeaderInner>
+        <BrandLink to="/">
+          <Logo />
+        </BrandLink>
+
+        <OpcoesHeader />
+        <IconesHeader />
+      </HeaderInner>
+    </HeaderContainer>
+  );
 }
 
-
-export default Header
+export default Header;

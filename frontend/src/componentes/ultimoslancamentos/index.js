@@ -1,114 +1,113 @@
-import styled from 'styled-components'
+import styled from "styled-components";
+import { colors } from "../../styles/theme";
 
 const LivrosContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
-  padding: 40px 20px;
-`
+  padding: 24px 0 56px;
+`;
 
 const LivroCard = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  background: ${colors.surface};
+  border: 1px solid ${colors.border};
+  border-radius: 22px;
   padding: 20px;
-  width: 250px;
   text-align: center;
-  color: #fff;
-  position: relative;
-  
+  color: ${colors.text};
+  box-shadow: ${colors.shadowSoft};
+
   img {
-    width: 150px;
-    height: 200px;
+    width: 100%;
+    height: 260px;
     object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    border-radius: 16px;
+    margin-bottom: 16px;
   }
-  
+
   h3 {
     font-size: 18px;
     margin: 10px 0;
-    color: #fff;
+    color: ${colors.text};
   }
-  
+
   p {
     font-size: 14px;
-    color: #ddd;
+    color: ${colors.muted};
     margin-bottom: 15px;
   }
-`
+`;
 
 const BotoesContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 15px;
-`
+`;
 
 const Botao = styled.button`
-  background-color: #cd76cc;
-  color: #111011;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
+  background-color: ${colors.surfaceAlt};
+  color: ${colors.text};
+  border: 1px solid ${colors.border};
+  padding: 10px 14px;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
-  
+  font-weight: 700;
+  transition: all 0.2s ease;
+
   &:hover:not(:disabled) {
-    background-color: #d14ccf;
-    transform: scale(1.05);
+    background-color: ${colors.primarySoft};
+    color: ${colors.primaryHover};
+    transform: translateY(-1px);
   }
-  
+
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
-`
-
-
+`;
 
 function UltimosLancamentos({ livros, onAdicionarFavorito, onComecarLer, onQueroLer, loading }) {
   if (!livros || livros.length === 0) {
-    return null
+    return null;
   }
 
   return (
     <LivrosContainer>
-      {livros.map(livro => (
+      {livros.map((livro) => (
         <LivroCard key={livro.googleId}>
-          {livro.thumbnail && (
-            <img src={livro.thumbnail} alt={livro.titulo} />
-          )}
+          {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
           <h3>{livro.titulo}</h3>
-          <p>{livro.autores?.join(', ') || 'Autor desconhecido'}</p>
-          
+          <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+
           <BotoesContainer>
-            <Botao 
+            <Botao
               onClick={() => onAdicionarFavorito(livro)}
               disabled={loading[`fav_${livro.googleId}`]}
             >
-              {loading[`fav_${livro.googleId}`] ? 'Adicionando...' : '⭐ Favoritar'}
+              {loading[`fav_${livro.googleId}`] ? "Adicionando..." : "Favoritar"}
             </Botao>
-            
-            <Botao 
+
+            <Botao
               onClick={() => onComecarLer(livro)}
               disabled={loading[`ler_${livro.googleId}`]}
             >
-              {loading[`ler_${livro.googleId}`] ? 'Iniciando...' : '📖 Começar a ler'}
+              {loading[`ler_${livro.googleId}`] ? "Iniciando..." : "Começar a ler"}
             </Botao>
-            
-            <Botao 
+
+            <Botao
               onClick={() => onQueroLer(livro)}
               disabled={loading[`queroler_${livro.googleId}`]}
             >
-              {loading[`queroler_${livro.googleId}`] ? 'Adicionando...' : '📚 Quero ler'}
+              {loading[`queroler_${livro.googleId}`] ? "Adicionando..." : "Quero ler"}
             </Botao>
           </BotoesContainer>
         </LivroCard>
       ))}
     </LivrosContainer>
-  )
+  );
 }
 
-export default UltimosLancamentos
+export default UltimosLancamentos;
