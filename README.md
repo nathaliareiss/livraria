@@ -54,6 +54,5 @@ Copy the example files:
 ## Next Improvements
 
 - Add automated tests for critical flows
-- Add a CI workflow for linting and build validation
 - Include screenshots or a short demo video
 - Add deployment notes for the backend and frontend
