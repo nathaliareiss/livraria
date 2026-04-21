@@ -80,28 +80,28 @@ function UltimosLancamentos({ livros, onAdicionarFavorito, onComecarLer, onQuero
         <LivroCard key={livro.googleId}>
           {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
           <h3>{livro.titulo}</h3>
-          <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+          <p>{livro.autores?.join(", ") || "Unknown author"}</p>
 
           <BotoesContainer>
             <Botao
               onClick={() => onAdicionarFavorito(livro)}
               disabled={loading[`fav_${livro.googleId}`]}
             >
-              {loading[`fav_${livro.googleId}`] ? "Adicionando..." : "Favoritar"}
+              {loading[`fav_${livro.googleId}`] ? "Adding..." : "Favorite"}
             </Botao>
 
             <Botao
               onClick={() => onComecarLer(livro)}
               disabled={loading[`ler_${livro.googleId}`]}
             >
-              {loading[`ler_${livro.googleId}`] ? "Iniciando..." : "Começar a ler"}
+              {loading[`ler_${livro.googleId}`] ? "Starting..." : "Start reading"}
             </Botao>
 
             <Botao
               onClick={() => onQueroLer(livro)}
               disabled={loading[`queroler_${livro.googleId}`]}
             >
-              {loading[`queroler_${livro.googleId}`] ? "Adicionando..." : "Quero ler"}
+              {loading[`queroler_${livro.googleId}`] ? "Adding..." : "Want to read"}
             </Botao>
           </BotoesContainer>
         </LivroCard>

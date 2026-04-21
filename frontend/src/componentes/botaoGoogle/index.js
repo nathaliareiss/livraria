@@ -25,13 +25,13 @@ function ConectarGoogle({ className }) {
       const response = await api.get("/auth/google/url");
       window.location.href = response.data.url;
     } catch (error) {
-      alert("Nao foi possivel conectar ao Google Calendar");
+      alert("Could not connect to Google Calendar");
     }
   };
 
   return (
     <Button className={className} type="button" onClick={conectarGoogle}>
-      Conectar Google Calendar
+      Connect Google Calendar
     </Button>
   );
 }

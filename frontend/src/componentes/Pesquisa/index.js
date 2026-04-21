@@ -73,20 +73,20 @@ function Pesquisa({ onBuscar }) {
   return (
     <PesquisaContainer>
       <Hero>
-        <Titulo>Explore livros com uma experiência limpa e objetiva.</Titulo>
+        <Titulo>Explore books with a clean and focused experience.</Titulo>
         <Subtitulo>
-          Busque títulos, organize sua estante, salve favoritos e acompanhe suas leituras em um layout pensado para clareza e profissionalismo.
+          Search titles, organize your library, save favorites, and track your reading in a layout built for clarity and professionalism.
         </Subtitulo>
 
         <SearchBar>
           <Form onSubmit={handleSubmit}>
             <Input
               type="text"
-              placeholder="Busque um livro"
+              placeholder="Search for a book"
               value={valor}
               onChange={(e) => setValor(e.target.value)}
             />
-            <SearchButton type="submit">Pesquisar</SearchButton>
+            <SearchButton type="submit">Search</SearchButton>
           </Form>
         </SearchBar>
       </Hero>

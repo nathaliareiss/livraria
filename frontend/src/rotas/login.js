@@ -82,7 +82,7 @@ export default function Login() {
       login(res.data.token, res.data.user);
       navigate("/estante");
     } catch (err) {
-      setErro(err.response?.data?.mensagem || "Erro ao fazer login.");
+      setErro(err.response?.data?.mensagem || "Failed to sign in.");
     }
   }
 
@@ -90,8 +90,8 @@ export default function Login() {
     <PageShell>
       <Center>
         <AuthCard>
-          <Title>Entrar</Title>
-          <Subtitle>Acesse sua estante e acompanhe leituras, favoritos e calendário em um único lugar.</Subtitle>
+          <Title>Sign in</Title>
+          <Subtitle>Access your library and continue tracking books, favorites, and events.</Subtitle>
 
           <Form onSubmit={handleSubmit}>
             <Input
@@ -103,14 +103,14 @@ export default function Login() {
 
             <Input
               type="password"
-              placeholder="Senha"
+              placeholder="Password"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
             />
 
             {erro && <ErrorText>{erro}</ErrorText>}
 
-            <PrimaryButton type="submit">Entrar</PrimaryButton>
+            <PrimaryButton type="submit">Sign in</PrimaryButton>
           </Form>
         </AuthCard>
       </Center>

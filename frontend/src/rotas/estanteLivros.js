@@ -80,7 +80,7 @@ function EstanteLivros() {
       const response = await api.get("/estante");
       setEstante(response.data);
     } catch (err) {
-      setErro("Erro ao carregar estante.");
+      setErro("Failed to load your library.");
     } finally {
       setLoading(false);
     }
@@ -91,7 +91,7 @@ function EstanteLivros() {
       await iniciarLeitura(livroId);
       carregarEstante();
     } catch (err) {
-      setErro(err.response?.data?.mensagem || "Erro ao iniciar leitura.");
+      setErro(err.response?.data?.mensagem || "Failed to start reading.");
     }
   }
 
@@ -100,7 +100,7 @@ function EstanteLivros() {
       await finalizarLeitura(livroId);
       carregarEstante();
     } catch (err) {
-      setErro(err.response?.data?.mensagem || "Erro ao finalizar leitura.");
+      setErro(err.response?.data?.mensagem || "Failed to finish reading.");
     }
   }
 
@@ -112,7 +112,7 @@ function EstanteLivros() {
     return (
       <PageShell>
         <Wrapper>
-          <Title>Carregando estante...</Title>
+          <Title>Loading library...</Title>
         </Wrapper>
       </PageShell>
     );
@@ -121,89 +121,89 @@ function EstanteLivros() {
   return (
     <PageShell>
       <Wrapper>
-        <Title>Minha estante</Title>
+        <Title>My library</Title>
         {erro && <p style={{ color: colors.danger, textAlign: "center" }}>{erro}</p>}
 
         <Secao>
-          <SecaoTitulo>Favoritos</SecaoTitulo>
+          <SecaoTitulo>Favorites</SecaoTitulo>
           <LivrosGrid>
             {estante.favoritos.length > 0 ? (
               estante.favoritos.map((livro) => (
                 <LivroCard key={livro._id}>
                   {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
                   <h4>{livro.titulo}</h4>
-                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  <p>{livro.autores?.join(", ") || "Unknown author"}</p>
                   {livro.statusLeitura !== "lendo" && livro.statusLeitura !== "lido" && (
                     <PrimaryButton type="button" onClick={() => handleIniciarLeitura(livro._id)}>
-                      Iniciar leitura
+                      Start reading
                     </PrimaryButton>
                   )}
                 </LivroCard>
               ))
             ) : (
-              <Empty>Nenhum favorito ainda.</Empty>
+              <Empty>No favorites yet.</Empty>
             )}
           </LivrosGrid>
         </Secao>
 
         <Secao>
-          <SecaoTitulo>Lendo</SecaoTitulo>
+          <SecaoTitulo>Reading</SecaoTitulo>
           <LivrosGrid>
             {estante.lendo.length > 0 ? (
               estante.lendo.map((livro) => (
                 <LivroCard key={livro._id}>
                   {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
                   <h4>{livro.titulo}</h4>
-                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  <p>{livro.autores?.join(", ") || "Unknown author"}</p>
                   <SecondaryButton type="button" onClick={() => handleFinalizarLeitura(livro._id)}>
-                    Finalizar leitura
+                    Finish reading
                   </SecondaryButton>
                 </LivroCard>
               ))
             ) : (
-              <Empty>Nenhum livro sendo lido no momento.</Empty>
+              <Empty>No books are being read right now.</Empty>
             )}
           </LivrosGrid>
         </Secao>
 
         <Secao>
-          <SecaoTitulo>Lidos</SecaoTitulo>
+          <SecaoTitulo>Finished</SecaoTitulo>
           <LivrosGrid>
             {estante.lidos.length > 0 ? (
               estante.lidos.map((livro) => (
                 <LivroCard key={livro._id}>
                   {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
                   <h4>{livro.titulo}</h4>
-                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  <p>{livro.autores?.join(", ") || "Unknown author"}</p>
                   {livro.dataFimLeitura && (
                     <p style={{ fontSize: 12, color: colors.subtle }}>
-                      Finalizado em: {new Date(livro.dataFimLeitura).toLocaleDateString("pt-BR")}
+                      Finished on: {new Date(livro.dataFimLeitura).toLocaleDateString("pt-BR")}
                     </p>
                   )}
                 </LivroCard>
               ))
             ) : (
-              <Empty>Nenhum livro lido ainda.</Empty>
+              <Empty>No books finished yet.</Empty>
             )}
           </LivrosGrid>
         </Secao>
 
         <Secao>
-          <SecaoTitulo>Quero ler</SecaoTitulo>
+          <SecaoTitulo>Want to read</SecaoTitulo>
           <LivrosGrid>
             {estante.queroLer.length > 0 ? (
               estante.queroLer.map((livro) => (
                 <LivroCard key={livro._id}>
                   {livro.thumbnail && <img src={livro.thumbnail} alt={livro.titulo} />}
                   <h4>{livro.titulo}</h4>
-                  <p>{livro.autores?.join(", ") || "Autor desconhecido"}</p>
+                  <p>{livro.autores?.join(", ") || "Unknown author"}</p>
                   <PrimaryButton type="button" onClick={() => handleIniciarLeitura(livro._id)}>
-                    Iniciar leitura
+                    Start reading
                   </PrimaryButton>
                 </LivroCard>
               ))
             ) : (
-              <Empty>Nenhum livro na lista Quero Ler.</Empty>
+              <Empty>No books in the Want to Read list.</Empty>
             )}
           </LivrosGrid>
         </Secao>

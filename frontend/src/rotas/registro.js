@@ -92,17 +92,17 @@ export default function Register() {
     const { nome, email, senha, confirmarSenha, dataNascimento } = form;
 
     if (senha !== confirmarSenha) {
-      setErro("As senhas nao conferem.");
+      setErro("Passwords do not match.");
       return;
     }
 
     if (senha.length < 8) {
-      setErro("A senha deve ter pelo menos 8 caracteres.");
+      setErro("Password must have at least 8 characters.");
       return;
     }
 
     if (!dataNascimento) {
-      setErro("Informe sua data de nascimento.");
+      setErro("Please provide your date of birth.");
       return;
     }
 
@@ -114,7 +114,7 @@ export default function Register() {
         dataNascimento,
       });
 
-      setSucesso("Cadastro realizado com sucesso!");
+      setSucesso("Account created successfully.");
 
       if (res.data.token) {
         login(res.data.token, res.data.user);
@@ -130,7 +130,7 @@ export default function Register() {
         dataNascimento: "",
       });
     } catch (err) {
-      setErro(err.response?.data?.mensagem || "Erro inesperado ao cadastrar.");
+      setErro(err.response?.data?.mensagem || "Unexpected error while creating the account.");
     }
   }
 
@@ -138,11 +138,11 @@ export default function Register() {
     <PageShell>
       <Center>
         <AuthCard>
-          <Title>Criar conta</Title>
-          <Subtitle>Cadastre-se para salvar livros, montar sua estante e organizar sua rotina de leitura.</Subtitle>
+          <Title>Create account</Title>
+          <Subtitle>Sign up to save books, build your library, and organize your reading routine.</Subtitle>
 
           <Form onSubmit={handleSubmit}>
-            <Input name="nome" placeholder="Nome" value={form.nome} onChange={handleChange} />
+            <Input name="nome" placeholder="Name" value={form.nome} onChange={handleChange} />
             <Input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
             <Input
               name="dataNascimento"
@@ -153,14 +153,14 @@ export default function Register() {
             <Input
               name="senha"
               type="password"
-              placeholder="Senha"
+              placeholder="Password"
               value={form.senha}
               onChange={handleChange}
             />
             <Input
               name="confirmarSenha"
               type="password"
-              placeholder="Confirme a senha"
+              placeholder="Confirm password"
               value={form.confirmarSenha}
               onChange={handleChange}
             />
@@ -168,7 +168,7 @@ export default function Register() {
             {erro && <ErrorText>{erro}</ErrorText>}
             {sucesso && <SuccessText>{sucesso}</SuccessText>}
 
-            <PrimaryButton type="submit">Cadastrar</PrimaryButton>
+            <PrimaryButton type="submit">Create account</PrimaryButton>
           </Form>
         </AuthCard>
       </Center>

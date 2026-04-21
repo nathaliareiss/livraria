@@ -56,7 +56,7 @@ function Favoritos() {
       const favoritosDaAPI = await getFavoritos();
       setFavoritos(favoritosDaAPI);
     } catch (error) {
-      setErro("Nao foi possivel carregar seus favoritos.");
+      setErro("Could not load your favorites.");
     } finally {
       setCarregando(false);
     }
@@ -67,7 +67,7 @@ function Favoritos() {
       await deleteFavorito(id);
       await fetchFavoritos();
     } catch (error) {
-      setErro("Nao foi possivel remover este favorito.");
+      setErro("Could not remove this favorite.");
     }
   }
 
@@ -78,20 +78,20 @@ function Favoritos() {
   return (
     <PageShell>
       <Wrapper>
-        <Title>Livros favoritos</Title>
+        <Title>Favorite books</Title>
         {erro && <p style={{ color: colors.danger, textAlign: "center" }}>{erro}</p>}
-        {carregando && <p style={{ color: colors.muted, textAlign: "center" }}>Carregando favoritos...</p>}
+        {carregando && <p style={{ color: colors.muted, textAlign: "center" }}>Loading favorites...</p>}
 
         {!carregando && favoritos.length === 0 ? (
-          <Empty>Você ainda não salvou nenhum favorito.</Empty>
+          <Empty>You have not saved any favorites yet.</Empty>
         ) : (
           <ResultadoContainer>
             {favoritos.map((favorito) => (
               <Resultado key={favorito._id}>
-                <Capa src={favorito.thumbnail || livroImg} alt={`Capa de ${favorito.titulo}`} />
+                <Capa src={favorito.thumbnail || livroImg} alt={`Cover of ${favorito.titulo}`} />
                 <h2 style={{ margin: 0, fontSize: 18 }}>{favorito.titulo}</h2>
                 <SecondaryButton type="button" onClick={() => deletaFavorito(favorito._id)}>
-                  Remover
+                  Remove
                 </SecondaryButton>
               </Resultado>
             ))}

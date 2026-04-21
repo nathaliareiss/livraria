@@ -28,13 +28,13 @@ function DesconectarGoogle({ className, onDesconectado }) {
         onDesconectado?.();
       }
     } catch (error) {
-      alert(error.response?.data?.erro || "Nao foi possivel desconectar o Google Calendar");
+      alert(error.response?.data?.erro || "Could not disconnect Google Calendar");
     }
   };
 
   return (
     <Button className={className} type="button" onClick={desconectar}>
-      Desconectar Google Calendar
+      Disconnect Google Calendar
     </Button>
   );
 }

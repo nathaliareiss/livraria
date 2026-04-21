@@ -44,9 +44,9 @@ function Home() {
       const res = await api.get(`/books/search?q=${termo}`);
       setLivros(res.data);
     } catch (err) {
-      setErro("Erro ao buscar livros.");
+      setErro("Failed to search books.");
       setStatusKind("error");
-      setStatus("Nao foi possivel carregar os resultados agora.");
+      setStatus("We could not load the results right now.");
     }
   }
 
@@ -56,10 +56,10 @@ function Home() {
       const livroAdicionado = await adicionarLivro(livroGoogle);
       await alternarFavorito(livroAdicionado._id);
       setStatusKind("success");
-      setStatus("Livro adicionado aos favoritos.");
+      setStatus("Book added to favorites.");
     } catch (err) {
       setStatusKind("error");
-      setStatus(err.response?.data?.mensagem || "Erro ao adicionar aos favoritos.");
+      setStatus(err.response?.data?.mensagem || "Failed to add to favorites.");
     } finally {
       setLoading({ ...loading, [`fav_${livroGoogle.googleId}`]: false });
     }
@@ -71,10 +71,10 @@ function Home() {
       const livroAdicionado = await adicionarLivro(livroGoogle);
       await iniciarLeitura(livroAdicionado._id);
       setStatusKind("success");
-      setStatus("Leitura iniciada e evento preparado.");
+      setStatus("Reading started and event prepared.");
     } catch (err) {
       setStatusKind("error");
-      setStatus(err.response?.data?.mensagem || "Erro ao iniciar leitura.");
+      setStatus(err.response?.data?.mensagem || "Failed to start reading.");
     } finally {
       setLoading({ ...loading, [`ler_${livroGoogle.googleId}`]: false });
     }
@@ -86,10 +86,10 @@ function Home() {
       const livroAdicionado = await adicionarLivro(livroGoogle);
       await alternarQueroLer(livroAdicionado._id);
       setStatusKind("success");
-      setStatus("Livro adicionado à lista Quero Ler.");
+      setStatus("Book added to the Want to Read list.");
     } catch (err) {
       setStatusKind("error");
-      setStatus(err.response?.data?.mensagem || "Erro ao adicionar.");
+      setStatus(err.response?.data?.mensagem || "Failed to add book.");
     } finally {
       setLoading({ ...loading, [`queroler_${livroGoogle.googleId}`]: false });
     }
@@ -105,7 +105,7 @@ function Home() {
 
         {livros.length === 0 ? (
           <EmptyState>
-            Pesquise um livro para começar a montar sua estante.
+            Search for a book to start building your library.
           </EmptyState>
         ) : (
           <UltimosLancamentos

@@ -20,7 +20,7 @@ const Icones = styled.ul`
 `;
 
 const icones = [
-  { src: perfil, alt: "Perfil" },
+  { src: perfil, alt: "Profile" },
   { src: sacola, alt: "Sacola" },
 ];
 

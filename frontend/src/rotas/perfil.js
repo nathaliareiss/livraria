@@ -63,12 +63,12 @@ export default function Perfil() {
   }, [navigate]);
 
   function formatarData(data) {
-    if (!data) return "Nao informado";
+    if (!data) return "Not provided";
     return new Date(data).toLocaleDateString("pt-BR");
   }
 
   function calcularIdade(dataNascimento) {
-    if (!dataNascimento) return "Nao informado";
+    if (!dataNascimento) return "Not provided";
 
     const hoje = new Date();
     const nascimento = new Date(dataNascimento);
@@ -79,7 +79,7 @@ export default function Perfil() {
       idade--;
     }
 
-    return `${idade} anos`;
+    return `${idade} years old`;
   }
 
   function handleLogout() {
@@ -92,7 +92,7 @@ export default function Perfil() {
     return (
       <PageShell>
         <Wrapper>
-          <Title>Carregando...</Title>
+          <Title>Loading...</Title>
         </Wrapper>
       </PageShell>
     );
@@ -106,10 +106,10 @@ export default function Perfil() {
     <PageShell>
       <Wrapper>
         <Card>
-          <Title>Meu perfil</Title>
+          <Title>My profile</Title>
 
           <Info>
-            <Label>Nome</Label>
+            <Label>Name</Label>
             <Valor>{user.nome}</Valor>
           </Info>
 
@@ -119,22 +119,22 @@ export default function Perfil() {
           </Info>
 
           <Info>
-            <Label>Data de nascimento</Label>
+            <Label>Date of birth</Label>
             <Valor>{formatarData(user.dataNascimento)}</Valor>
           </Info>
 
           <Info>
-            <Label>Idade</Label>
+            <Label>Age</Label>
             <Valor>{calcularIdade(user.dataNascimento)}</Valor>
           </Info>
 
           <Info>
-            <Label>ID do usuário</Label>
+            <Label>User ID</Label>
             <Valor>{user.id}</Valor>
           </Info>
 
           <PrimaryButton type="button" onClick={handleLogout}>
-            Sair
+            Sign out
           </PrimaryButton>
         </Card>
       </Wrapper>

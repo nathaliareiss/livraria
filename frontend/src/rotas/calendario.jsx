@@ -90,11 +90,11 @@ export default function Calendario() {
 
       if (msg.includes("Conta Google nao conectada") || msg.includes("nao conectada")) {
         setGoogleConectado(false);
-        setErro("Conecte sua conta Google para criar e visualizar eventos.");
+        setErro("Connect your Google account to create and view events.");
       } else if (err.response?.status === 401) {
-        setErro("Voce precisa estar logado.");
+        setErro("You need to be signed in.");
       } else {
-        setErro("Erro ao carregar o calendario.");
+        setErro("Failed to load the calendar.");
       }
 
       setEventosGoogle([]);
@@ -121,7 +121,7 @@ export default function Calendario() {
       setFim("");
       carregar();
     } catch (err) {
-      setErro("Erro ao criar evento.");
+      setErro("Failed to create event.");
     }
   }
 
@@ -136,7 +136,7 @@ export default function Calendario() {
     ...leituras.map((l) => ({
       id: l._id,
       tipo: "leitura",
-      titulo: l.livroId?.titulo ? `Leitura: ${l.livroId.titulo}` : "Leitura iniciada",
+      titulo: l.livroId?.titulo ? `Reading: ${l.livroId.titulo}` : "Reading started",
       inicio: l.dataInicio,
       fim: l.dataFim,
       tempoTotal: l.tempoTotal,
@@ -146,7 +146,7 @@ export default function Calendario() {
   return (
     <PageShell>
       <Wrapper>
-        <Title>Calendário de leitura</Title>
+        <Title>Reading calendar</Title>
 
         <Actions>
           {!googleConectado ? (
@@ -166,7 +166,7 @@ export default function Calendario() {
         <Card>
           <form onSubmit={criarEvento}>
             <Input
-              placeholder="Título do evento"
+              placeholder="Event title"
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
               required
@@ -183,7 +183,7 @@ export default function Calendario() {
               onChange={(e) => setFim(e.target.value)}
               required
             />
-            <PrimaryButton type="submit">Criar evento</PrimaryButton>
+            <PrimaryButton type="submit">Create event</PrimaryButton>
           </form>
         </Card>
 
@@ -192,9 +192,9 @@ export default function Calendario() {
             <EventoCard key={evento.id}>
               <EventTitle>{evento.titulo}</EventTitle>
               <Meta>{new Date(evento.inicio).toLocaleString()}</Meta>
-              {evento.fim && <Meta>Até: {new Date(evento.fim).toLocaleString()}</Meta>}
+              {evento.fim && <Meta>Until: {new Date(evento.fim).toLocaleString()}</Meta>}
               {evento.tipo === "leitura" && evento.tempoTotal && (
-                <Meta>Duração total: {evento.tempoTotal} min</Meta>
+                <Meta>Total duration: {evento.tempoTotal} min</Meta>
               )}
             </EventoCard>
           ))}

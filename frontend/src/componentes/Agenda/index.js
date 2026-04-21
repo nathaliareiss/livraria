@@ -18,14 +18,14 @@ function Agenda() {
       const response = await api.get("/auth/google/url");
       window.location.href = response.data.url;
     } catch (error) {
-      alert("Nao foi possivel conectar ao Google Agenda");
+      alert("Could not connect to Google Agenda");
     }
   }
 
   return (
     <div className="calendario">
       <Button type="button" onClick={conectarGoogle}>
-        Conectar Google Agenda
+        Connect Google Agenda
       </Button>
     </div>
   );

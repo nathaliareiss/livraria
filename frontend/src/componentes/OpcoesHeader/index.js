@@ -61,15 +61,15 @@ function OpcoesHeader() {
   }
 
   const opcoesNaoLogado = [
-    { label: "Cadastre-se", path: "/cadastre-se" },
+    { label: "Sign up", path: "/cadastre-se" },
     { label: "Login", path: "/login" },
   ];
 
   const opcoesLogado = [
-    { label: "Perfil", path: "/perfil" },
-    { label: "Favoritos", path: "/favoritos" },
-    { label: "Calendario", path: "/calendario" },
-    { label: "Estante", path: "/estante" },
+    { label: "Profile", path: "/perfil" },
+    { label: "Favorites", path: "/favoritos" },
+    { label: "Calendar", path: "/calendario" },
+    { label: "Library", path: "/estante" },
   ];
 
   return (
@@ -89,7 +89,7 @@ function OpcoesHeader() {
       {isLoggedIn && (
         <Item>
           <LogoutButton type="button" onClick={handleLogout}>
-            Logout
+            Log out
           </LogoutButton>
         </Item>
       )}
