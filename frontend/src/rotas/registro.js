@@ -3,66 +3,67 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextos/AuthContext";
 import styled from "styled-components";
 import api from "../servicos/api";
+import { colors } from "../styles/theme";
+import { PageShell, PageSection, SurfaceCard, PrimaryButton } from "../componentes/ui";
 
-const AppContainer = styled.div`
-  width: 100vw;
-  min-height: 100vh;
-  background-image: linear-gradient(90deg, #002F52 35%, #326589 165%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
+const Center = styled(PageSection)`
+  min-height: calc(100vh - 78px);
+  display: grid;
+  place-items: center;
+  padding: 32px 0 56px;
 `;
-const Card = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 40px;
-  max-width: 420px;
-  width: 100%;
-  color: #fff;
+
+const AuthCard = styled(SurfaceCard)`
+  width: min(100%, 520px);
+  padding: 32px;
 `;
-const Titulo = styled.h2`
-  color: #FFF;
-  font-size: 36px;
-  text-align: center;
-  margin-bottom: 30px;
+
+const Title = styled.h1`
+  margin: 0 0 8px;
+  font-size: 34px;
+  letter-spacing: -0.04em;
 `;
+
+const Subtitle = styled.p`
+  margin: 0 0 28px;
+  color: ${colors.muted};
+  line-height: 1.6;
+`;
+
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: grid;
+  gap: 16px;
 `;
+
 const Input = styled.input`
   width: 100%;
-  padding: 12px 16px;
-  border-radius: 6px;
-  border: none;
-  font-size: 16px;
-  box-sizing: border-box;
+  border: 1px solid ${colors.border};
+  background: ${colors.surfaceAlt};
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: ${colors.text};
 
   &::placeholder {
-    color: #999;
+    color: ${colors.subtle};
   }
-`;
-const Botao = styled.button`
-  background-color: #cd76cc;
-  color: #111011;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  margin-top: 10px;
 
-  &:hover {
-    background-color: #d14ccf;
+  &:focus {
+    outline: none;
+    border-color: ${colors.primary};
+    box-shadow: 0 0 0 4px ${colors.primarySoft};
   }
 `;
-const Erro = styled.p`
-  color: #ff6b6b;
-  text-align: center;
+
+const ErrorText = styled.p`
   margin: 0;
+  color: ${colors.danger};
+  font-size: 14px;
+`;
+
+const SuccessText = styled.p`
+  margin: 0;
+  color: ${colors.success};
   font-size: 14px;
 `;
 
@@ -129,50 +130,48 @@ export default function Register() {
         dataNascimento: "",
       });
     } catch (err) {
-      if (err.response?.data?.mensagem) {
-        setErro(err.response.data.mensagem);
-      } else {
-        setErro("Erro inesperado ao cadastrar");
-      }
+      setErro(err.response?.data?.mensagem || "Erro inesperado ao cadastrar.");
     }
   }
 
   return (
-    <AppContainer>
-      <Card>
-        <Titulo>Cadastro</Titulo>
+    <PageShell>
+      <Center>
+        <AuthCard>
+          <Title>Criar conta</Title>
+          <Subtitle>Cadastre-se para salvar livros, montar sua estante e organizar sua rotina de leitura.</Subtitle>
 
-        <Form onSubmit={handleSubmit}>
-          <Input name="nome" placeholder="Nome" value={form.nome} onChange={handleChange} />
-          <Input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-          <Input
-            name="dataNascimento"
-            type="date"
-            placeholder="Data de nascimento"
-            value={form.dataNascimento}
-            onChange={handleChange}
-          />
-          <Input
-            name="senha"
-            type="password"
-            placeholder="Senha"
-            value={form.senha}
-            onChange={handleChange}
-          />
-          <Input
-            name="confirmarSenha"
-            type="password"
-            placeholder="Confirme a senha"
-            value={form.confirmarSenha}
-            onChange={handleChange}
-          />
+          <Form onSubmit={handleSubmit}>
+            <Input name="nome" placeholder="Nome" value={form.nome} onChange={handleChange} />
+            <Input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
+            <Input
+              name="dataNascimento"
+              type="date"
+              value={form.dataNascimento}
+              onChange={handleChange}
+            />
+            <Input
+              name="senha"
+              type="password"
+              placeholder="Senha"
+              value={form.senha}
+              onChange={handleChange}
+            />
+            <Input
+              name="confirmarSenha"
+              type="password"
+              placeholder="Confirme a senha"
+              value={form.confirmarSenha}
+              onChange={handleChange}
+            />
 
-          {erro && <Erro>{erro}</Erro>}
-          {sucesso && <p style={{ color: "green" }}>{sucesso}</p>}
+            {erro && <ErrorText>{erro}</ErrorText>}
+            {sucesso && <SuccessText>{sucesso}</SuccessText>}
 
-          <Botao type="submit">Cadastrar</Botao>
-        </Form>
-      </Card>
-    </AppContainer>
+            <PrimaryButton type="submit">Cadastrar</PrimaryButton>
+          </Form>
+        </AuthCard>
+      </Center>
+    </PageShell>
   );
 }
