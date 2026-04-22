@@ -18,9 +18,9 @@ const routes = (app) => {
     app.use(teste);
   }
 
+  app.use(booksExternalRoutes);
   app.use(
     databaseAvailability,
-    booksExternalRoutes,
     authRoutes,
     livros,
     leitura,
