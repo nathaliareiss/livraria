@@ -1,7 +1,13 @@
 import db from "../config/dbConnect.js";
 
 export default function databaseAvailability(req, res, next) {
-  if (req.method === "POST" && (req.path === "/login" || req.path === "/cadastre-se")) {
+  if (
+    req.method === "POST" &&
+    (req.path === "/login" ||
+      req.path === "/cadastre-se" ||
+      req.path === "/esqueci-minha-senha" ||
+      req.path === "/redefinir-senha")
+  ) {
     return next();
   }
 
