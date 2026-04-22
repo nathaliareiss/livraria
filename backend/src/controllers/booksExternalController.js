@@ -1,4 +1,5 @@
 import { buscarLivrosGoogle } from "../services/googleBooksService.js";
+import { buscarLivrosLocal } from "../services/localBooksFallback.js";
 
 export async function buscarLivros(req, res) {
   try {
@@ -13,13 +14,8 @@ export async function buscarLivros(req, res) {
     res.json(livros);
   } catch (error) {
     console.error("Erro ao buscar livros externos:", error.message);
+    const fallbackLivros = await buscarLivrosLocal(req.query.q);
 
-    if (error.response?.status) {
-      return res.status(502).json({
-        mensagem: "Nao foi possivel consultar o Google Books no momento.",
-      });
-    }
-
-    res.status(500).json({ mensagem: "Erro ao buscar livros" });
+    return res.json(fallbackLivros);
   }
 }

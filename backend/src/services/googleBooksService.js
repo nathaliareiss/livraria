@@ -9,6 +9,7 @@ export async function buscarLivrosGoogle(query) {
       maxResults: 10,
     },
     timeout: 10000,
+    proxy: false,
   });
 
   const items = Array.isArray(response.data?.items) ? response.data.items : [];
