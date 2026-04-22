@@ -9,6 +9,7 @@ import Home from "./rotas/Home";
 import Calendario from "./rotas/calendario";
 import Register from "./rotas/registro";
 import Login from "./rotas/login";
+import RecuperarSenha from "./rotas/recuperarSenha";
 import EstanteLivros from "./rotas/estanteLivros";
 import Perfil from "./rotas/perfil";
 import { colors, typography } from "./styles/theme";
@@ -78,6 +79,7 @@ root.render(
             <Route path="/" element={<Home />} />
             <Route path="/cadastre-se" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/recuperar-senha" element={<RecuperarSenha />} />
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/calendario" element={<Calendario />} />
             <Route path="/estante" element={<EstanteLivros />} />
