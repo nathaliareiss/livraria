@@ -9,15 +9,20 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 
 const port = process.env.PORT || 8001;
 
+let dbReady = true;
+
 try {
   const { connectDb } = await import("./src/config/dbConnect.js");
   await connectDb();
-  const { default: app } = await import("./src/app.js");
-
-  app.listen(port, () => {
-    console.log(`Servidor escutando em http://localhost:${port}`);
-  });
 } catch (error) {
-  console.error("Servidor nao iniciado porque o banco nao conectou.");
-  process.exit(1);
+  dbReady = false;
+  console.error("Banco nao conectou. Subindo o servidor em modo degradado.");
 }
+
+const { default: app } = await import("./src/app.js");
+
+app.set("dbReady", dbReady);
+
+app.listen(port, () => {
+  console.log(`Servidor escutando em http://localhost:${port}`);
+});
