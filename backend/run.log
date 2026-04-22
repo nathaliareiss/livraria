@@ -2,4 +2,5 @@
 > livraria-backend@1.0.0 start
 > node server.js
 
+MongoDB conectado com sucesso em cluster0.p9fsjny.mongodb.net
 Servidor escutando em http://localhost:8001

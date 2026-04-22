@@ -12,7 +12,14 @@ export async function buscarLivros(req, res) {
 
     res.json(livros);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao buscar livros externos:", error.message);
+
+    if (error.response?.status) {
+      return res.status(502).json({
+        mensagem: "Nao foi possivel consultar o Google Books no momento.",
+      });
+    }
+
     res.status(500).json({ mensagem: "Erro ao buscar livros" });
   }
 }

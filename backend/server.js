@@ -9,20 +9,27 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 
 const port = process.env.PORT || 8001;
 
-let dbReady = true;
+async function bootstrap() {
+  const dbModule = await import("./src/config/dbConnect.js");
+  await dbModule.connectDb();
 
-try {
-  const { connectDb } = await import("./src/config/dbConnect.js");
-  await connectDb();
-} catch (error) {
-  dbReady = false;
-  console.error("Banco nao conectou. Subindo o servidor em modo degradado.");
+  dbModule.default.on("disconnected", () => {
+    console.error("MongoDB desconectado. Encerrando servidor.");
+    process.exit(1);
+
+  const { default: app } = await import("./src/app.js");
+  const server = app.listen(port, () => {
+    console.log(`Servidor escutando em http://localhost:${port}`);
+  });
+
+  server.on("error", (error) => {
+    console.error("Falha ao iniciar o servidor:", error.message);
+    process.exit(1);
+  });
 }
 
-const { default: app } = await import("./src/app.js");
-
-app.set("dbReady", dbReady);
-
-app.listen(port, () => {
-  console.log(`Servidor escutando em http://localhost:${port}`);
+bootstrap().catch((error) => {
+  console.error("Banco nao conectou. Encerrando aplicacao.");
+  console.error(error.message);
+  process.exit(1);
 });

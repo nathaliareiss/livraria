@@ -4,7 +4,7 @@ import api from './api'
 
 //aqui vamos buscar livros do google
 async function buscarLivrosExternos(termo){
-    const response = await api.get(`/books/search?q=${termo}`)
+    const response = await api.get(`/books/search?q=${encodeURIComponent(termo)}`)
     return response.data
 }
 

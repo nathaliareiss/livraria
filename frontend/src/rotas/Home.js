@@ -41,7 +41,7 @@ function Home() {
     try {
       setErro("");
       setStatus("");
-      const res = await api.get(`/books/search?q=${termo}`);
+      const res = await api.get(`/books/search?q=${encodeURIComponent(termo)}`);
       setLivros(res.data);
     } catch (err) {
       setErro("Failed to search books.");

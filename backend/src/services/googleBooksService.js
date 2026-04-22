@@ -6,11 +6,14 @@ export async function buscarLivrosGoogle(query) {
   const response = await axios.get(GOOGLE_BOOKS_URL, {
     params: {
       q: query,
-      maxResults: 10
-    }
+      maxResults: 10,
+    },
+    timeout: 10000,
   });
 
-  return response.data.items.map(item => {
+  const items = Array.isArray(response.data?.items) ? response.data.items : [];
+
+  return items.map((item) => {
     const info = item.volumeInfo;
 
     return {

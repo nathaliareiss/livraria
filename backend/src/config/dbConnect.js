@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import dns from "dns";
 
 const mongoUri = process.env.STRING_CONEXAO_DB || process.env.MONGO_URI;
 const mongoHost = mongoUri
@@ -8,7 +9,7 @@ const mongoHost = mongoUri
       } catch {
         return "desconhecido";
       }
-    })()
+  })()
   : null;
 
 let connectPromise = null;
@@ -25,6 +26,10 @@ export async function connectDb() {
   }
 
   if (!connectPromise) {
+    if (mongoUri.startsWith("mongodb+srv://")) {
+      dns.setServers(["1.1.1.1", "8.8.8.8"]);
+    }
+
     connectPromise = mongoose
       .connect(mongoUri, {
         serverSelectionTimeoutMS: 10000,
