@@ -2,3 +2,4 @@
 > livraria-backend@1.0.0 start
 > node server.js
 
+Servidor escutando em http://localhost:8001
