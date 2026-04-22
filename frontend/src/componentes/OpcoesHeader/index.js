@@ -67,7 +67,6 @@ function OpcoesHeader() {
 
   const opcoesLogado = [
     { label: "Profile", path: "/perfil" },
-    { label: "Favorites", path: "/favoritos" },
     { label: "Calendar", path: "/calendario" },
     { label: "Library", path: "/estante" },
   ];

@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contextos/AuthContext";
 import Header from "./componentes/Header";
 import Home from "./rotas/Home";
-import Favoritos from "./rotas/favoritos";
 import Calendario from "./rotas/calendario";
 import Register from "./rotas/registro";
 import Login from "./rotas/login";
@@ -80,7 +79,6 @@ root.render(
             <Route path="/cadastre-se" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/perfil" element={<Perfil />} />
-            <Route path="/favoritos" element={<Favoritos />} />
             <Route path="/calendario" element={<Calendario />} />
             <Route path="/estante" element={<EstanteLivros />} />
           </Routes>
