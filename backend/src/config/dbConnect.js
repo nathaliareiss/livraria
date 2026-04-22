@@ -47,7 +47,7 @@ export async function connectDb() {
 const db = mongoose.connection;
 
 db.on("error", (error) => {
-  console.error("Erro de conexao", error);
+  console.error("Erro de conexao", error.message);
 });
 
 db.on("disconnected", () => {
