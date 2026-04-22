@@ -19,6 +19,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  passwordResetCodeHash: {
+    type: String,
+    default: null,
+  },
+  passwordResetExpiresAt: {
+    type: Date,
+    default: null,
+  },
 }, { timestamps: true });
 
 export default mongoose.model("User", UserSchema);

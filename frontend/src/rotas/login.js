@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../contextos/AuthContext";
 import styled from "styled-components";
 import api from "../servicos/api";
@@ -62,6 +63,18 @@ const ErrorText = styled.p`
   font-size: 14px;
 `;
 
+const RecoveryLink = styled(Link)`
+  align-self: flex-start;
+  color: ${colors.primaryHover};
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -111,6 +124,7 @@ export default function Login() {
             {erro && <ErrorText>{erro}</ErrorText>}
 
             <PrimaryButton type="submit">Sign in</PrimaryButton>
+            <RecoveryLink to="/recuperar-senha">Forgot your password?</RecoveryLink>
           </Form>
         </AuthCard>
       </Center>

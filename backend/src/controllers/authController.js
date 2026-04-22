@@ -2,7 +2,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import db from "../config/dbConnect.js";
 import User from "../models/usuario.js";
-import { createUser as createLocalUser, findUserByEmail as findLocalUserByEmail } from "../services/localUserStore.js";
+import {
+  clearPasswordResetCode as clearLocalPasswordResetCode,
+  createUser as createLocalUser,
+  findUserByEmail as findLocalUserByEmail,
+  setPasswordResetCode as setLocalPasswordResetCode,
+  updatePasswordByEmail as updateLocalPasswordByEmail,
+} from "../services/localUserStore.js";
 
 function isMongoAvailable() {
   return db.readyState === 1;
@@ -12,13 +18,67 @@ function getUserId(user) {
   return user?._id?.toString?.() || user?._id || user?.id;
 }
 
+function generateRecoveryCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+async function findUserByEmail(email) {
+  return isMongoAvailable()
+    ? User.findOne({ email })
+    : findLocalUserByEmail(email);
+}
+
+async function setPasswordResetCode(email, codeHash, expiresAt) {
+  if (isMongoAvailable()) {
+    return User.findOneAndUpdate(
+      { email },
+      {
+        passwordResetCodeHash: codeHash,
+        passwordResetExpiresAt: expiresAt,
+      },
+      { new: true }
+    );
+  }
+
+  return setLocalPasswordResetCode(email, codeHash, expiresAt);
+}
+
+async function clearPasswordResetCode(email) {
+  if (isMongoAvailable()) {
+    return User.findOneAndUpdate(
+      { email },
+      {
+        passwordResetCodeHash: null,
+        passwordResetExpiresAt: null,
+      },
+      { new: true }
+    );
+  }
+
+  return clearLocalPasswordResetCode(email);
+}
+
+async function updatePasswordByEmail(email, senhaHash) {
+  if (isMongoAvailable()) {
+    return User.findOneAndUpdate(
+      { email },
+      {
+        senha: senhaHash,
+        passwordResetCodeHash: null,
+        passwordResetExpiresAt: null,
+      },
+      { new: true }
+    );
+  }
+
+  return updateLocalPasswordByEmail(email, senhaHash);
+}
+
 export async function register(req, res) {
   try {
     const { nome, dataNascimento, email, senha } = req.body;
 
-    const usuarioExiste = isMongoAvailable()
-      ? await User.findOne({ email })
-      : await findLocalUserByEmail(email);
+    const usuarioExiste = await findUserByEmail(email);
 
     if (usuarioExiste) {
       return res.status(400).json({ mensagem: "Usuário já existe" });
@@ -69,9 +129,7 @@ export async function login(req, res, next) {
   try {
     const { email, senha } = req.body;
 
-    const user = isMongoAvailable()
-      ? await User.findOne({ email })
-      : await findLocalUserByEmail(email);
+    const user = await findUserByEmail(email);
 
     if (!user) {
       return res.status(401).json({ mensagem: "Email ou senha inválidos" });
@@ -97,5 +155,77 @@ export async function login(req, res, next) {
     });
   } catch (erro) {
     next(erro);
+  }
+}
+
+export async function requestPasswordReset(req, res) {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ mensagem: "Informe seu email" });
+    }
+
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      return res.status(404).json({ mensagem: "Usuario nao encontrado" });
+    }
+
+    const recoveryCode = generateRecoveryCode();
+    const codeHash = await bcrypt.hash(recoveryCode, 10);
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+    await setPasswordResetCode(email, codeHash, expiresAt);
+
+    res.json({
+      mensagem: "Codigo de recuperacao gerado com sucesso",
+      recoveryCode,
+      expiresAt,
+    });
+  } catch (erro) {
+    res.status(500).json({ mensagem: "Erro ao gerar codigo de recuperacao" });
+  }
+}
+
+export async function resetPassword(req, res) {
+  try {
+    const { email, recoveryCode, novaSenha, confirmarSenha } = req.body;
+
+    if (!email || !recoveryCode || !novaSenha || !confirmarSenha) {
+      return res.status(400).json({ mensagem: "Preencha todos os campos" });
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      return res.status(400).json({ mensagem: "As senhas nao coincidem" });
+    }
+
+    if (novaSenha.length < 8) {
+      return res.status(400).json({ mensagem: "Senha deve ter pelo menos 8 caracteres" });
+    }
+
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      return res.status(404).json({ mensagem: "Usuario nao encontrado" });
+    }
+
+    const expiresAt = user.passwordResetExpiresAt ? new Date(user.passwordResetExpiresAt) : null;
+    if (!user.passwordResetCodeHash || !expiresAt || expiresAt.getTime() < Date.now()) {
+      return res.status(400).json({ mensagem: "Codigo de recuperacao expirado ou invalido" });
+    }
+
+    const codeValid = await bcrypt.compare(recoveryCode, user.passwordResetCodeHash);
+    if (!codeValid) {
+      return res.status(400).json({ mensagem: "Codigo de recuperacao invalido" });
+    }
+
+    const senhaHash = await bcrypt.hash(novaSenha, 10);
+    await updatePasswordByEmail(email, senhaHash);
+    await clearPasswordResetCode(email);
+
+    res.json({ mensagem: "Senha alterada com sucesso" });
+  } catch (erro) {
+    res.status(500).json({ mensagem: "Erro ao redefinir senha" });
   }
 }

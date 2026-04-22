@@ -41,6 +41,24 @@ async function writeUsers(users) {
   await fs.writeFile(storePath, JSON.stringify(users, null, 2), "utf8");
 }
 
+async function updateUserByEmail(email, updater) {
+  const users = await readUsers();
+  const normalizedEmail = String(email).toLowerCase();
+  const index = users.findIndex(
+    (user) => String(user.email).toLowerCase() === normalizedEmail
+  );
+
+  if (index === -1) {
+    return null;
+  }
+
+  const updatedUser = updater({ ...users[index] });
+  users[index] = updatedUser;
+
+  await writeUsers(users);
+  return updatedUser;
+}
+
 export async function findUserByEmail(email) {
   const users = await readUsers();
   const normalizedEmail = String(email).toLowerCase();
@@ -71,4 +89,32 @@ export async function createUser({ nome, dataNascimento, email, senha }) {
   await writeUsers(users);
 
   return user;
+}
+
+export async function setPasswordResetCode(email, codeHash, expiresAt) {
+  return updateUserByEmail(email, (user) => ({
+    ...user,
+    passwordResetCodeHash: codeHash,
+    passwordResetExpiresAt: expiresAt,
+    updatedAt: new Date().toISOString(),
+  }));
+}
+
+export async function clearPasswordResetCode(email) {
+  return updateUserByEmail(email, (user) => ({
+    ...user,
+    passwordResetCodeHash: null,
+    passwordResetExpiresAt: null,
+    updatedAt: new Date().toISOString(),
+  }));
+}
+
+export async function updatePasswordByEmail(email, senha) {
+  return updateUserByEmail(email, (user) => ({
+    ...user,
+    senha,
+    passwordResetCodeHash: null,
+    passwordResetExpiresAt: null,
+    updatedAt: new Date().toISOString(),
+  }));
 }
