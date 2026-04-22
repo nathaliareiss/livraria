@@ -12,10 +12,8 @@ const port = process.env.PORT || 8001;
 async function bootstrap() {
   const dbModule = await import("./src/config/dbConnect.js");
   await dbModule.connectDb();
-
   dbModule.default.on("disconnected", () => {
-    console.error("MongoDB desconectado. Encerrando servidor.");
-    process.exit(1);
+    console.warn("MongoDB desconectado. O servidor continua ativo.");
   });
 
   const { default: app } = await import("./src/app.js");
