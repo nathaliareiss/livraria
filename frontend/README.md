@@ -52,7 +52,7 @@ npm install
 2. Configure a URL da API em um arquivo `.env` dentro de `frontend/`:
 
 ```bash
-REACT_APP_API_URL=http://localhost:8000
+REACT_APP_API_URL=http://localhost:8001
 ```
 
 3. Inicie o frontend:
@@ -65,7 +65,7 @@ Por padrao, a aplicacao roda em `http://localhost:3000`.
 
 ## Backend necessario
 
-Para o frontend funcionar de ponta a ponta, o backend tambem precisa estar ativo. O projeto espera a API em `http://localhost:8000`, a nao ser que `REACT_APP_API_URL` aponte para outro endereco.
+Para o frontend funcionar de ponta a ponta, o backend tambem precisa estar ativo. O projeto espera a API em `http://localhost:8001`, a nao ser que `REACT_APP_API_URL` aponte para outro endereco.
 
 Se voce estiver publicando o projeto, ajuste estas variaveis:
 

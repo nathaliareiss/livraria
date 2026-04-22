@@ -17,7 +17,7 @@ A polished full-stack book management app with favorites, a personal library, re
 
 1. Install dependencies in both `backend` and `frontend`.
 2. Copy the example environment files.
-3. Start the backend on port `8000`.
+3. Start the backend on port `8001`.
 4. Start the frontend on port `3000`.
 
 ### Backend
