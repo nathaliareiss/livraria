@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../servicos/api";
 import Pesquisa from "../componentes/Pesquisa";
 import UltimosLancamentos from "../componentes/ultimoslancamentos";
@@ -36,6 +36,33 @@ function Home() {
   const [loading, setLoading] = useState({});
   const [status, setStatus] = useState("");
   const [statusKind, setStatusKind] = useState("success");
+  const [successMarks, setSuccessMarks] = useState({});
+  const successTimers = useRef({});
+
+  useEffect(() => {
+    return () => {
+      Object.values(successTimers.current).forEach((timerId) => clearTimeout(timerId));
+    };
+  }, []);
+
+  function triggerSuccess(action, googleId) {
+    const key = `${action}_${googleId}`;
+
+    setSuccessMarks((current) => ({ ...current, [key]: true }));
+
+    if (successTimers.current[key]) {
+      clearTimeout(successTimers.current[key]);
+    }
+
+    successTimers.current[key] = setTimeout(() => {
+      setSuccessMarks((current) => {
+        const next = { ...current };
+        delete next[key];
+        return next;
+      });
+      delete successTimers.current[key];
+    }, 1800);
+  }
 
   async function buscarLivros(termo) {
     try {
@@ -55,6 +82,7 @@ function Home() {
       setLoading({ ...loading, [`fav_${livroGoogle.googleId}`]: true });
       const livroAdicionado = await adicionarLivro(livroGoogle);
       await alternarFavorito(livroAdicionado._id);
+      triggerSuccess("fav", livroGoogle.googleId);
       setStatusKind("success");
       setStatus("Book added to favorites.");
     } catch (err) {
@@ -70,6 +98,7 @@ function Home() {
       setLoading({ ...loading, [`ler_${livroGoogle.googleId}`]: true });
       const livroAdicionado = await adicionarLivro(livroGoogle);
       await iniciarLeitura(livroAdicionado._id);
+      triggerSuccess("ler", livroGoogle.googleId);
       setStatusKind("success");
       setStatus("Reading started and event prepared.");
     } catch (err) {
@@ -85,6 +114,7 @@ function Home() {
       setLoading({ ...loading, [`queroler_${livroGoogle.googleId}`]: true });
       const livroAdicionado = await adicionarLivro(livroGoogle);
       await alternarQueroLer(livroAdicionado._id);
+      triggerSuccess("queroler", livroGoogle.googleId);
       setStatusKind("success");
       setStatus("Book added to the Want to Read list.");
     } catch (err) {
@@ -114,6 +144,7 @@ function Home() {
             onComecarLer={handleComecarLer}
             onQueroLer={handleQueroLer}
             loading={loading}
+            successMarks={successMarks}
           />
         )}
       </Content>

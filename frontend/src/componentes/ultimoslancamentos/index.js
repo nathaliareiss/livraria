@@ -69,10 +69,70 @@ const Botao = styled.button`
   }
 `;
 
-function UltimosLancamentos({ livros, onAdicionarFavorito, onComecarLer, onQueroLer, loading }) {
+const ButtonContent = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+`;
+
+const SuccessBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: ${colors.success};
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(21, 128, 61, 0.12);
+`;
+
+const SuccessLabel = styled.span`
+  color: ${colors.success};
+`;
+
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 20 20" width="12" height="12" fill="none" aria-hidden="true">
+      <path
+        d="M16.25 5.75L8.5 13.5L3.75 8.75"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function UltimosLancamentos({
+  livros,
+  onAdicionarFavorito,
+  onComecarLer,
+  onQueroLer,
+  loading,
+  successMarks,
+}) {
   if (!livros || livros.length === 0) {
     return null;
   }
+
+  const renderButtonLabel = (action, googleId, idleLabel, loadingLabel) => {
+    const key = `${action}_${googleId}`;
+    if (successMarks?.[key]) {
+      return (
+        <ButtonContent>
+          <SuccessBadge>
+            <CheckIcon />
+          </SuccessBadge>
+          <SuccessLabel>Added</SuccessLabel>
+        </ButtonContent>
+      );
+    }
+
+    return loadingLabel ? loadingLabel : idleLabel;
+  };
 
   return (
     <LivrosContainer>
@@ -87,21 +147,27 @@ function UltimosLancamentos({ livros, onAdicionarFavorito, onComecarLer, onQuero
               onClick={() => onAdicionarFavorito(livro)}
               disabled={loading[`fav_${livro.googleId}`]}
             >
-              {loading[`fav_${livro.googleId}`] ? "Adding..." : "Favorite"}
+              {loading[`fav_${livro.googleId}`]
+                ? "Adding..."
+                : renderButtonLabel("fav", livro.googleId, "Favorite")}
             </Botao>
 
             <Botao
               onClick={() => onComecarLer(livro)}
               disabled={loading[`ler_${livro.googleId}`]}
             >
-              {loading[`ler_${livro.googleId}`] ? "Starting..." : "Start reading"}
+              {loading[`ler_${livro.googleId}`]
+                ? "Starting..."
+                : renderButtonLabel("ler", livro.googleId, "Start reading")}
             </Botao>
 
             <Botao
               onClick={() => onQueroLer(livro)}
               disabled={loading[`queroler_${livro.googleId}`]}
             >
-              {loading[`queroler_${livro.googleId}`] ? "Adding..." : "Want to read"}
+              {loading[`queroler_${livro.googleId}`]
+                ? "Adding..."
+                : renderButtonLabel("queroler", livro.googleId, "Want to read")}
             </Botao>
           </BotoesContainer>
         </LivroCard>
