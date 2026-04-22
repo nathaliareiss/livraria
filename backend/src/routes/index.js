@@ -7,6 +7,7 @@ import authRoutes from "./authRoutes.js";
 import booksExternalRoutes from "./booksExternalRoutes.js";
 import leitura from "./leituraRoutes.js";
 import teste from "./teste.js";
+import databaseAvailability from "../middlewares/databaseAvailability.js";
 
 const routes = (app) => {
   app.route("/").get((req, res) => {
@@ -18,6 +19,7 @@ const routes = (app) => {
   }
 
   app.use(
+    databaseAvailability,
     booksExternalRoutes,
     authRoutes,
     livros,

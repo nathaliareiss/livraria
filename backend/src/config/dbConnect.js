@@ -1,13 +1,23 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const mongoUri = process.env.STRING_CONEXAO_DB || process.env.MONGO_URI;
 
 if (!mongoUri) {
-  throw new Error("Missing MongoDB connection string. Set STRING_CONEXAO_DB or MONGO_URI in backend/.env");
+  console.warn(
+    "MongoDB connection string is not configured. Set STRING_CONEXAO_DB or MONGO_URI in backend/.env."
+  );
+} else {
+  mongoose
+    .connect(mongoUri)
+    .catch((error) => {
+      console.error("Erro de conexao com o MongoDB", error);
+    });
 }
 
-mongoose.connect(mongoUri);
+const db = mongoose.connection;
 
-let db = mongoose.connection;
+db.on("error", (error) => {
+  console.error("Erro de conexao", error);
+});
 
 export default db;

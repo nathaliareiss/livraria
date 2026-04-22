@@ -1,0 +1,12 @@
+import db from "../config/dbConnect.js";
+
+export default function databaseAvailability(req, res, next) {
+  if (db.readyState === 0 || db.readyState === 3) {
+    return res.status(503).json({
+      mensagem:
+        "Banco de dados indisponível no momento. Verifique STRING_CONEXAO_DB ou MONGO_URI.",
+    });
+  }
+
+  next();
+}
