@@ -16,6 +16,7 @@ async function bootstrap() {
   dbModule.default.on("disconnected", () => {
     console.error("MongoDB desconectado. Encerrando servidor.");
     process.exit(1);
+  });
 
   const { default: app } = await import("./src/app.js");
   const server = app.listen(port, () => {
