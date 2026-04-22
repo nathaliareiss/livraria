@@ -11,22 +11,37 @@ const mongoHost = mongoUri
     })()
   : null;
 
-if (!mongoUri) {
-  console.warn(
-    "MongoDB connection string is not configured. Set STRING_CONEXAO_DB or MONGO_URI in backend/.env."
-  );
-} else {
-  mongoose
-    .connect(mongoUri, {
-      serverSelectionTimeoutMS: 10000,
-    })
-    .then(() => {
-      console.log(`MongoDB conectado com sucesso em ${mongoHost}`);
-    })
-    .catch((error) => {
-      console.error(`Falha ao conectar no MongoDB em ${mongoHost}`);
-      console.error(error.message);
-    });
+let connectPromise = null;
+
+export async function connectDb() {
+  if (!mongoUri) {
+    throw new Error(
+      "MongoDB connection string is not configured. Set STRING_CONEXAO_DB or MONGO_URI in backend/.env."
+    );
+  }
+
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (!connectPromise) {
+    connectPromise = mongoose
+      .connect(mongoUri, {
+        serverSelectionTimeoutMS: 10000,
+      })
+      .then((connection) => {
+        console.log(`MongoDB conectado com sucesso em ${mongoHost}`);
+        return connection;
+      })
+      .catch((error) => {
+        connectPromise = null;
+        console.error(`Falha ao conectar no MongoDB em ${mongoHost}`);
+        console.error(error.message);
+        throw error;
+      });
+  }
+
+  return connectPromise;
 }
 
 const db = mongoose.connection;
