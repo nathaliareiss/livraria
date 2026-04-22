@@ -14,6 +14,7 @@ const Hero = styled(PageSection)`
   background: linear-gradient(135deg, ${colors.surfaceDark} 0%, ${colors.surfaceDarkAlt} 100%);
   box-shadow: ${colors.shadow};
   color: #fff;
+  text-align: center;
 `;
 
 const Titulo = styled.h2`
@@ -26,6 +27,8 @@ const Titulo = styled.h2`
 const Subtitulo = styled.h3`
   margin: 0 0 28px;
   max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
   color: rgba(255, 255, 255, 0.76);
   font-size: 17px;
   font-weight: 500;
@@ -34,13 +37,14 @@ const Subtitulo = styled.h3`
 
 const SearchBar = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 `;
 
 const Form = styled.form`
   display: flex;
   gap: 12px;
   width: min(100%, 680px);
+  margin: 0 auto;
   align-items: center;
 `;
 

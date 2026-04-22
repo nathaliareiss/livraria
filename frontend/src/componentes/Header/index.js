@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import OpcoesHeader from "../OpcoesHeader";
-import IconesHeader from "../iconesHeader";
 import Logo from "../Logo";
 import { PageSection } from "../ui";
 import { colors } from "../../styles/theme";
@@ -43,7 +42,6 @@ function Header() {
         </BrandLink>
 
         <OpcoesHeader />
-        <IconesHeader />
       </HeaderInner>
     </HeaderContainer>
   );
