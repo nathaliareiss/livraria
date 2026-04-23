@@ -1,7 +1,17 @@
+import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import OpcoesHeader from ".";
 import { useAuth } from "../../contextos/AuthContext";
+
+const mockNavigate = jest.fn();
+
+jest.mock("react-router-dom", () => ({
+  Link: ({ to, children, ...props }) => {
+    const React = require("react");
+    return React.createElement("a", { href: to, ...props }, children);
+  },
+  useNavigate: () => mockNavigate,
+}));
 
 jest.mock("../../contextos/AuthContext", () => ({
   useAuth: jest.fn(),
@@ -9,6 +19,7 @@ jest.mock("../../contextos/AuthContext", () => ({
 
 describe("OpcoesHeader", () => {
   beforeEach(() => {
+    mockNavigate.mockClear();
     useAuth.mockReset();
   });
 
@@ -18,11 +29,7 @@ describe("OpcoesHeader", () => {
       logout: jest.fn(),
     });
 
-    render(
-      <MemoryRouter>
-        <OpcoesHeader />
-      </MemoryRouter>
-    );
+    render(<OpcoesHeader />);
 
     expect(screen.getByRole("link", { name: /home/i })).toHaveAttribute("href", "/");
     expect(screen.getByRole("link", { name: /sign up/i })).toHaveAttribute("href", "/cadastre-se");
@@ -37,11 +44,7 @@ describe("OpcoesHeader", () => {
       logout,
     });
 
-    render(
-      <MemoryRouter>
-        <OpcoesHeader />
-      </MemoryRouter>
-    );
+    render(<OpcoesHeader />);
 
     expect(screen.getByRole("link", { name: /home/i })).toHaveAttribute("href", "/");
     expect(screen.getByRole("link", { name: /profile/i })).toHaveAttribute("href", "/perfil");
@@ -51,5 +54,6 @@ describe("OpcoesHeader", () => {
     fireEvent.click(screen.getByRole("button", { name: /log out/i }));
 
     expect(logout).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith("/login");
   });
 });
