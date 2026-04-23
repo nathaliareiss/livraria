@@ -162,6 +162,10 @@ const FieldHint = styled.span`
   line-height: 1.5;
 `;
 
+const MessageArea = styled.div`
+  margin: 14px 0 4px;
+`;
+
 export default function RecuperarSenha() {
   const [email, setEmail] = useState("");
   const [codigo, setCodigo] = useState("");
@@ -288,6 +292,13 @@ export default function RecuperarSenha() {
             </Step>
           </Stepper>
 
+          {(erro || sucesso) && (
+            <MessageArea>
+              {erro && <ErrorText>{erro}</ErrorText>}
+              {sucesso && <ErrorText style={{ color: colors.success, marginTop: erro ? 8 : 0 }}>{sucesso}</ErrorText>}
+            </MessageArea>
+          )}
+
           <Section>
             <SectionTitle>1. Email</SectionTitle>
             <SectionText>Digite o email cadastrado. Depois disso, o sistema gera o codigo de recuperacao.</SectionText>
@@ -361,9 +372,6 @@ export default function RecuperarSenha() {
 
                 <FieldHint>Se quiser, revise o email e o codigo antes de concluir a troca.</FieldHint>
 
-                {erro && <ErrorText>{erro}</ErrorText>}
-                {sucesso && <ErrorText style={{ color: colors.success }}>{sucesso}</ErrorText>}
-
                 <PrimaryButton type="submit" disabled={isPasswordLoading || !novaSenha || !confirmarSenha}>
                   {isPasswordLoading ? "Atualizando..." : "Atualizar senha"}
                 </PrimaryButton>
@@ -374,13 +382,6 @@ export default function RecuperarSenha() {
               <strong>Campos de senha bloqueados</strong>
               <span>Depois de validar o codigo, os campos de redefinicao aparecem aqui.</span>
             </StatusBox>
-          )}
-
-          {(etapa !== "senha" || erro || sucesso) && (
-            <div style={{ marginTop: 16 }}>
-              {erro && <ErrorText>{erro}</ErrorText>}
-              {sucesso && etapa !== "senha" && <ErrorText style={{ color: colors.success }}>{sucesso}</ErrorText>}
-            </div>
           )}
 
           <div style={{ marginTop: 18 }}>
