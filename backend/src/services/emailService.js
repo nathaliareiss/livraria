@@ -8,13 +8,13 @@ function getTransporter() {
   }
 
   const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT || 587);
+  const port = 587;
   const user = process.env.SMTP_USER?.trim();
   const pass = process.env.SMTP_PASS?.replace(/\s+/g, "");
-  const secure = String(process.env.SMTP_SECURE || "").toLowerCase() === "true" || port === 465;
+  const secure = String(process.env.SMTP_SECURE || "").toLowerCase() === "true";
 
   if (!host || !user || !pass) {
-    throw new Error("Servidor de email nao configurado. Defina SMTP_HOST, SMTP_PORT, SMTP_USER e SMTP_PASS.");
+    throw new Error("Servidor de email nao configurado. Defina SMTP_HOST, SMTP_USER e SMTP_PASS.");
   }
 
   cachedTransporter = nodemailer.createTransport({

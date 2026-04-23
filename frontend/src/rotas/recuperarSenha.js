@@ -124,16 +124,6 @@ const ErrorText = styled.p`
   font-size: 14px;
 `;
 
-const StatusBox = styled.div`
-  display: grid;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 16px;
-  border: 1px solid ${(props) => (props.$tone === "success" ? "#bbf7d0" : "#fde68a")};
-  background: ${(props) => (props.$tone === "success" ? "#f0fdf4" : "#fffbeb")};
-  color: ${(props) => (props.$tone === "success" ? colors.success : "#a16207")};
-`;
-
 const BackLink = styled(Link)`
   color: ${colors.primaryHover};
   font-size: 14px;
@@ -328,7 +318,7 @@ export default function RecuperarSenha() {
             </Section>
           )}
 
-          {etapa === "senha" ? (
+          {etapa === "senha" && (
             <Section style={{ marginTop: 16 }}>
               <SectionTitle>3. Nova senha</SectionTitle>
               <SectionText>Agora voce pode criar uma nova senha com pelo menos 8 caracteres.</SectionText>
@@ -357,11 +347,6 @@ export default function RecuperarSenha() {
                 </PrimaryButton>
               </Form>
             </Section>
-          ) : (
-            <StatusBox $tone="warning" style={{ marginTop: 16 }}>
-              <strong>Campos de senha bloqueados</strong>
-              <span>Depois de validar o codigo, os campos de redefinicao aparecem aqui.</span>
-            </StatusBox>
           )}
 
           <div style={{ marginTop: 18 }}>

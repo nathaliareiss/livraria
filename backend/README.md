@@ -22,13 +22,13 @@ Crie o arquivo `.env` dentro de `backend/` com base em `.env.example`.
 - `FRONTEND_URL`
 - `BACKEND_URL`
 - `SMTP_HOST`
-- `SMTP_PORT`
 - `SMTP_SECURE`
 - `SMTP_USER`
 - `SMTP_PASS`
 - `SMTP_FROM`
 
 O fluxo de recuperacao de senha envia o codigo por email. Sem essas variaveis de SMTP configuradas, o envio nao acontece.
+O backend usa a porta 587 por padrao no Nodemailer.
 
 Se voce usar MongoDB Atlas:
 
