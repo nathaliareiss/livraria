@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import db from "../config/dbConnect.js";
 import User from "../models/usuario.js";
@@ -36,6 +37,10 @@ function buildMongoEmailMatch(email) {
   return new RegExp(`^${escapedEmail}$`, "i");
 }
 
+function isMongoObjectId(id) {
+  return mongoose.Types.ObjectId.isValid(id) && String(new mongoose.Types.ObjectId(id)) === String(id);
+}
+
 async function findUserByEmail(email) {
   const normalizedEmail = normalizeEmail(email);
 
@@ -45,7 +50,14 @@ async function findUserByEmail(email) {
 }
 
 async function findUserById(userId) {
-  return isMongoAvailable() ? User.findById(userId) : findLocalUserById(userId);
+  if (isMongoAvailable() && isMongoObjectId(userId)) {
+    const user = await User.findById(userId);
+    if (user) {
+      return user;
+    }
+  }
+
+  return findLocalUserById(userId);
 }
 
 async function setPasswordResetCode(email, codeHash, expiresAt) {
@@ -101,7 +113,7 @@ async function updatePasswordByEmail(email, senhaHash) {
 }
 
 async function updateUserProfile(userId, updates) {
-  if (isMongoAvailable()) {
+  if (isMongoAvailable() && isMongoObjectId(userId)) {
     return User.findByIdAndUpdate(userId, updates, {
       new: true,
       runValidators: true,
