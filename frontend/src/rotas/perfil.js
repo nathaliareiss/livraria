@@ -240,10 +240,13 @@ export default function Perfil() {
           return;
         }
 
-        setErro(
-          err.response?.data?.mensagem ||
-            "Nao foi possivel carregar seu perfil. Mostrando os dados salvos localmente."
-        );
+        if (authUser) {
+          setProfile(authUser);
+          setForm(buildFormFromUser(authUser));
+          setErro("");
+        } else {
+          setErro(err.response?.data?.mensagem || "Nao foi possivel carregar seu perfil.");
+        }
       } finally {
         if (active) {
           setLoading(false);
@@ -321,7 +324,22 @@ export default function Perfil() {
         return;
       }
 
-      setErro(err.response?.data?.mensagem || "Nao foi possivel atualizar seu perfil.");
+      if (authUser) {
+        const fallbackUser = {
+          ...authUser,
+          nome: form.nome.trim() || authUser.nome,
+          email: form.email.trim().toLowerCase() || authUser.email,
+          dataNascimento: form.dataNascimento || authUser.dataNascimento,
+        };
+
+        setProfile(fallbackUser);
+        setForm(buildFormFromUser(fallbackUser));
+        updateUser(fallbackUser);
+        setErro("");
+        setSucesso("Perfil atualizado neste navegador.");
+      } else {
+        setErro(err.response?.data?.mensagem || "Nao foi possivel atualizar seu perfil.");
+      }
     } finally {
       setSaving(false);
     }
