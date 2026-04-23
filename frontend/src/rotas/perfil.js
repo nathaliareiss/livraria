@@ -217,7 +217,9 @@ export default function Perfil() {
 
     async function carregarPerfil() {
       try {
-        const res = await api.get("/perfil");
+        const res = await api.get("/perfil", {
+          params: authUser?.id ? { userId: authUser.id } : undefined,
+        });
         if (!active) return;
 
         const userData = res.data.user;
@@ -287,6 +289,7 @@ export default function Perfil() {
       const payload = {
         nome: form.nome.trim(),
         email: form.email.trim().toLowerCase(),
+        userId: profile.id || authUser?.id,
       };
 
       if (form.dataNascimento) {
