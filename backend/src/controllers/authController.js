@@ -164,6 +164,12 @@ function serializeUser(user) {
   };
 }
 
+function disableCaching(res) {
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+}
+
 async function getValidPasswordResetUser(email, recoveryCode) {
   const user = await findUserByEmail(email);
 
@@ -282,6 +288,7 @@ export async function login(req, res, next) {
 
 export async function getProfile(req, res) {
   try {
+    disableCaching(res);
     const user = await findAuthenticatedUser(req);
 
     if (!user) {
@@ -296,6 +303,7 @@ export async function getProfile(req, res) {
 
 export async function updateProfile(req, res) {
   try {
+    disableCaching(res);
     const { nome, email, dataNascimento } = req.body;
     const normalizedNome = String(nome || "").trim();
     const requestEmail = getRequestEmail(req);

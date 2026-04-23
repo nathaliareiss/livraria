@@ -313,6 +313,7 @@ export default function Perfil() {
         dataNascimento: toDateInputValue(updatedUser.dataNascimento),
       });
       updateUser(updatedUser);
+      setErro("");
       setSucesso("Perfil atualizado com sucesso.");
     } catch (err) {
       if (err.response?.status === 401) {
