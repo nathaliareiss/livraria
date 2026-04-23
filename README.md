@@ -100,6 +100,8 @@ The repository already includes GitHub Actions CI that runs:
 - backend lint
 - frontend production build
 
+Frontend tests live under `frontend/src/tests/`, and the backend has a dedicated `backend/tests/` folder ready for future coverage.
+
 ## Why this project is portfolio-ready
 
 - Clear auth flow with secure recovery by email

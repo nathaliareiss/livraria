@@ -1,8 +1,8 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import Login from "./login";
-import api from "../servicos/api";
-import { useAuth } from "../contextos/AuthContext";
+import Login from "../../rotas/login";
+import api from "../../servicos/api";
+import { useAuth } from "../../contextos/AuthContext";
 
 const mockNavigate = jest.fn();
 
@@ -14,11 +14,11 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }), { virtual: true });
 
-jest.mock("../contextos/AuthContext", () => ({
+jest.mock("../../contextos/AuthContext", () => ({
   useAuth: jest.fn(),
 }));
 
-jest.mock("../servicos/api", () => ({
+jest.mock("../../servicos/api", () => ({
   __esModule: true,
   default: {
     post: jest.fn(),

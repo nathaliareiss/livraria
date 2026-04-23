@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import OpcoesHeader from ".";
+import OpcoesHeader from "../../componentes/OpcoesHeader";
 import { useAuth } from "../../contextos/AuthContext";
 
 const mockNavigate = jest.fn();

@@ -1,7 +1,7 @@
 import React from "react";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import RecuperarSenha from "./recuperarSenha";
-import api from "../servicos/api";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import RecuperarSenha from "../../rotas/recuperarSenha";
+import api from "../../servicos/api";
 
 const mockNavigate = jest.fn();
 
@@ -13,7 +13,7 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }), { virtual: true });
 
-jest.mock("../servicos/api", () => ({
+jest.mock("../../servicos/api", () => ({
   __esModule: true,
   default: {
     post: jest.fn(),
@@ -80,6 +80,7 @@ describe("RecuperarSenha", () => {
     fireEvent.click(screen.getByRole("button", { name: /validar codigo/i }));
 
     expect(await screen.findByText(/codigo validado com sucesso/i)).toBeInTheDocument();
+
     const passwordInputs = screen.getAllByPlaceholderText(/nova senha/i);
     const [novaSenhaInput, confirmarSenhaInput] = passwordInputs;
 

@@ -52,3 +52,4 @@ npm run dev
 - Do not commit real `.env` values to the repository.
 - The password recovery flow requires a working SMTP account.
 - The project can fall back to local user storage if MongoDB is not available.
+- Backend tests are reserved for the `tests/` folder at the project root of `backend/`.

@@ -38,6 +38,7 @@ REACT_APP_API_URL=http://localhost:8001
 - The frontend expects the backend API to be available.
 - Authentication state is stored in `localStorage` and kept in sync through the auth context.
 - The profile screen supports editing the saved user information.
+- Frontend tests live under `src/tests/`.
 
 ## Build
 
