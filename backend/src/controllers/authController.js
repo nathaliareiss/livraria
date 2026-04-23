@@ -30,6 +30,10 @@ function normalizeEmail(email) {
   return String(email || "").trim();
 }
 
+function getRequestEmail(req) {
+  return normalizeEmail(req.headers["x-user-email"]);
+}
+
 function buildMongoEmailMatch(email) {
   const normalizedEmail = normalizeEmail(email);
   const escapedEmail = normalizedEmail.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -58,6 +62,20 @@ async function findUserById(userId) {
   }
 
   return findLocalUserById(userId);
+}
+
+async function findAuthenticatedUser(req) {
+  const userById = await findUserById(req.userId);
+  if (userById) {
+    return userById;
+  }
+
+  const requestEmail = getRequestEmail(req);
+  if (requestEmail) {
+    return findUserByEmail(requestEmail);
+  }
+
+  return null;
 }
 
 async function setPasswordResetCode(email, codeHash, expiresAt) {
@@ -254,7 +272,7 @@ export async function login(req, res, next) {
 
 export async function getProfile(req, res) {
   try {
-    const user = await findUserById(req.userId);
+    const user = await findAuthenticatedUser(req);
 
     if (!user) {
       return res.status(404).json({ mensagem: "Usuario nao encontrado" });
@@ -270,8 +288,9 @@ export async function updateProfile(req, res) {
   try {
     const { nome, email, dataNascimento } = req.body;
     const normalizedNome = String(nome || "").trim();
+    const requestEmail = getRequestEmail(req);
 
-    const currentUser = await findUserById(req.userId);
+    const currentUser = (await findUserById(req.userId)) || (requestEmail ? await findUserByEmail(requestEmail) : null);
     if (!currentUser) {
       return res.status(404).json({ mensagem: "Usuario nao encontrado" });
     }
@@ -302,7 +321,7 @@ export async function updateProfile(req, res) {
       updates.dataNascimento = nextDataNascimento;
     }
 
-    const updatedUser = await updateUserProfile(req.userId, updates);
+    const updatedUser = await updateUserProfile(getUserId(currentUser), updates);
 
     res.json({
       mensagem: "Perfil atualizado com sucesso",
