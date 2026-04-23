@@ -6,6 +6,7 @@ export default function databaseAvailability(req, res, next) {
     (req.path === "/login" ||
       req.path === "/cadastre-se" ||
       req.path === "/esqueci-minha-senha" ||
+      req.path === "/validar-codigo-recuperacao" ||
       req.path === "/redefinir-senha")
   ) {
     return next();

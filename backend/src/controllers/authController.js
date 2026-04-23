@@ -74,6 +74,36 @@ async function updatePasswordByEmail(email, senhaHash) {
   return updateLocalPasswordByEmail(email, senhaHash);
 }
 
+async function getValidPasswordResetUser(email, recoveryCode) {
+  const user = await findUserByEmail(email);
+
+  if (!user) {
+    return { error: { status: 404, mensagem: "Usuario nao encontrado" } };
+  }
+
+  const expiresAt = user.passwordResetExpiresAt ? new Date(user.passwordResetExpiresAt) : null;
+  if (!user.passwordResetCodeHash || !expiresAt || expiresAt.getTime() < Date.now()) {
+    return {
+      error: {
+        status: 400,
+        mensagem: "Codigo de recuperacao expirado ou invalido",
+      },
+    };
+  }
+
+  const codeValid = await bcrypt.compare(recoveryCode, user.passwordResetCodeHash);
+  if (!codeValid) {
+    return {
+      error: {
+        status: 400,
+        mensagem: "Codigo de recuperacao invalido",
+      },
+    };
+  }
+
+  return { user };
+}
+
 export async function register(req, res) {
   try {
     const { nome, dataNascimento, email, senha } = req.body;
@@ -188,6 +218,25 @@ export async function requestPasswordReset(req, res) {
   }
 }
 
+export async function validatePasswordResetCode(req, res) {
+  try {
+    const { email, recoveryCode } = req.body;
+
+    if (!email || !recoveryCode) {
+      return res.status(400).json({ mensagem: "Informe email e codigo de recuperacao" });
+    }
+
+    const result = await getValidPasswordResetUser(email, recoveryCode);
+    if (result.error) {
+      return res.status(result.error.status).json({ mensagem: result.error.mensagem });
+    }
+
+    res.json({ mensagem: "Codigo validado com sucesso" });
+  } catch (erro) {
+    res.status(500).json({ mensagem: "Erro ao validar codigo de recuperacao" });
+  }
+}
+
 export async function resetPassword(req, res) {
   try {
     const { email, recoveryCode, novaSenha, confirmarSenha } = req.body;
@@ -204,20 +253,9 @@ export async function resetPassword(req, res) {
       return res.status(400).json({ mensagem: "Senha deve ter pelo menos 8 caracteres" });
     }
 
-    const user = await findUserByEmail(email);
-
-    if (!user) {
-      return res.status(404).json({ mensagem: "Usuario nao encontrado" });
-    }
-
-    const expiresAt = user.passwordResetExpiresAt ? new Date(user.passwordResetExpiresAt) : null;
-    if (!user.passwordResetCodeHash || !expiresAt || expiresAt.getTime() < Date.now()) {
-      return res.status(400).json({ mensagem: "Codigo de recuperacao expirado ou invalido" });
-    }
-
-    const codeValid = await bcrypt.compare(recoveryCode, user.passwordResetCodeHash);
-    if (!codeValid) {
-      return res.status(400).json({ mensagem: "Codigo de recuperacao invalido" });
+    const result = await getValidPasswordResetUser(email, recoveryCode);
+    if (result.error) {
+      return res.status(result.error.status).json({ mensagem: result.error.mensagem });
     }
 
     const senhaHash = await bcrypt.hash(novaSenha, 10);
