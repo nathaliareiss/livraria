@@ -1,69 +1,104 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 
-// 1) Cria o contexto (é como uma "caixa" que vai guardar os dados)
-//vai permitir compartilhar o estado de login entre os componentes
-//sem recarregar a pagina, isso para atualizar as opcoes do header
+function normalizeStoredUser(userData) {
+  if (!userData) {
+    return null;
+  }
+
+  return {
+    ...userData,
+    id: userData.id || userData._id || null,
+    email: userData.email || "",
+    nome: userData.nome || "",
+    dataNascimento: userData.dataNascimento || null,
+  };
+}
+
+function getInitialAuthState() {
+  if (typeof window === "undefined") {
+    return {
+      isLoggedIn: false,
+      user: null,
+    };
+  }
+
+  const token = localStorage.getItem("token");
+  const userData = localStorage.getItem("user");
+
+  if (!token || !userData) {
+    return {
+      isLoggedIn: false,
+      user: null,
+    };
+  }
+
+  try {
+    return {
+      isLoggedIn: true,
+      user: normalizeStoredUser(JSON.parse(userData)),
+    };
+  } catch {
+    return {
+      isLoggedIn: false,
+      user: null,
+    };
+  }
+}
+
 const AuthContext = createContext();
 
-// 2) Hook customizado para usar o contexto facilmente
-//    Em vez de usar useContext(AuthContext) em todo lugar,
-//    você só chama useAuth()
 export function useAuth() {
   const context = useContext(AuthContext);
-  
 
   if (!context) {
-    throw new Error('useAuth deve ser usado dentro de AuthProvider');
+    throw new Error("useAuth deve ser usado dentro de AuthProvider");
   }
-  
+
   return context;
 }
 
-// 3) Provider: componente que "fornece" os dados para os filhos
 export function AuthProvider({ children }) {
-  // Estado que guarda se o usuário está logado
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  // Estado que guarda os dados do usuário
-  const [user, setUser] = useState(null);
+  const initialAuthState = getInitialAuthState();
+  const [isLoggedIn, setIsLoggedIn] = useState(initialAuthState.isLoggedIn);
+  const [user, setUser] = useState(initialAuthState.user);
 
-  // useEffect roda quando o componente monta
-  // Verifica se já tem token salvo (usuário já estava logado antes)
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-    
+
     if (token && userData) {
-      // Se tem token e dados, marca como logado
       setIsLoggedIn(true);
-      setUser(JSON.parse(userData));
+      setUser(normalizeStoredUser(JSON.parse(userData)));
     } else {
-      // Se não tem, marca como não logado
       setIsLoggedIn(false);
       setUser(null);
     }
-  }, []); // array vazio = roda só uma vez quando monta
+  }, []);
 
-  // Função para fazer login (salva token e atualiza estado)
   function login(token, userData) {
+    const normalizedUser = normalizeStoredUser(userData);
+
     localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("user", JSON.stringify(normalizedUser));
     setIsLoggedIn(true);
-    setUser(userData);
+    setUser(normalizedUser);
   }
 
   function updateUser(userData) {
     if (!userData) {
       localStorage.removeItem("user");
       setUser(null);
+      setIsLoggedIn(false);
       return;
     }
 
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    const normalizedUser = normalizeStoredUser(userData);
+
+    localStorage.setItem("user", JSON.stringify(normalizedUser));
+    setUser(normalizedUser);
+    setIsLoggedIn(true);
   }
 
-  // Função para fazer logout (remove token e atualiza estado)
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -71,19 +106,13 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  // Objeto com tudo que vai ser compartilhado
   const value = {
-    isLoggedIn,  // se está logado ou não
-    user,        // dados do usuário
-    login,       // função para fazer login
-    updateUser,  // atualiza os dados do usuário salvo
-    logout,      // função para fazer logout
+    isLoggedIn,
+    user,
+    login,
+    updateUser,
+    logout,
   };
 
-  // Provider "fornece" o value para todos os componentes filhos
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

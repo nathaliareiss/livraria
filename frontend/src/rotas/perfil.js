@@ -231,22 +231,24 @@ export default function Perfil() {
         const userData = res.data.user;
         setProfile(userData);
         setForm(buildFormFromUser(userData));
-      } catch (err) {
-        if (!active) return;
+    } catch (err) {
+      if (!active) return;
 
-        if (err.response?.status === 401) {
-          logout();
+      if (err.response?.status === 401) {
+        logout();
           navigate("/login");
           return;
         }
 
-        if (authUser) {
-          setProfile(authUser);
-          setForm(buildFormFromUser(authUser));
-          setErro("");
-        } else {
-          setErro(err.response?.data?.mensagem || "Nao foi possivel carregar seu perfil.");
-        }
+      const fallbackUser = authUser;
+
+      if (fallbackUser) {
+        setProfile(fallbackUser);
+        setForm(buildFormFromUser(fallbackUser));
+        setErro("");
+      } else {
+        setErro(err.response?.data?.mensagem || "Nao foi possivel carregar seu perfil.");
+      }
       } finally {
         if (active) {
           setLoading(false);
@@ -293,13 +295,14 @@ export default function Perfil() {
     setErro("");
     setSucesso("");
     setSaving(true);
+    const currentUser = profile || authUser;
 
     try {
       const payload = {
         nome: form.nome.trim(),
         email: form.email.trim().toLowerCase(),
-        userId: profile.id || authUser?.id,
-        currentEmail: profile.email || authUser?.email,
+        userId: currentUser?.id,
+        currentEmail: currentUser?.email,
       };
 
       if (form.dataNascimento) {
@@ -324,12 +327,12 @@ export default function Perfil() {
         return;
       }
 
-      if (authUser) {
+      if (currentUser) {
         const fallbackUser = {
-          ...authUser,
-          nome: form.nome.trim() || authUser.nome,
-          email: form.email.trim().toLowerCase() || authUser.email,
-          dataNascimento: form.dataNascimento || authUser.dataNascimento,
+          ...currentUser,
+          nome: form.nome.trim() || currentUser.nome,
+          email: form.email.trim().toLowerCase() || currentUser.email,
+          dataNascimento: form.dataNascimento || currentUser.dataNascimento,
         };
 
         setProfile(fallbackUser);

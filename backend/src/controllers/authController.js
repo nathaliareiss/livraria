@@ -57,16 +57,21 @@ function isMongoObjectId(id) {
 async function findUserByEmail(email) {
   const normalizedEmail = normalizeEmail(email);
 
-  return isMongoAvailable()
-    ? User.findOne({ email: buildMongoEmailMatch(normalizedEmail) })
-    : findLocalUserByEmail(normalizedEmail);
+  if (isMongoAvailable()) {
+    const mongoUser = await User.findOne({ email: buildMongoEmailMatch(normalizedEmail) });
+    if (mongoUser) {
+      return mongoUser;
+    }
+  }
+
+  return findLocalUserByEmail(normalizedEmail);
 }
 
 async function findUserById(userId) {
   if (isMongoAvailable() && isMongoObjectId(userId)) {
-    const user = await User.findById(userId);
-    if (user) {
-      return user;
+    const mongoUser = await User.findById(userId);
+    if (mongoUser) {
+      return mongoUser;
     }
   }
 
@@ -142,10 +147,14 @@ async function updatePasswordByEmail(email, senhaHash) {
 
 async function updateUserProfile(userId, updates) {
   if (isMongoAvailable() && isMongoObjectId(userId)) {
-    return User.findByIdAndUpdate(userId, updates, {
+    const updatedMongoUser = await User.findByIdAndUpdate(userId, updates, {
       new: true,
       runValidators: true,
     });
+
+    if (updatedMongoUser) {
+      return updatedMongoUser;
+    }
   }
 
   return updateLocalUserProfileById(userId, updates);
@@ -330,7 +339,7 @@ export async function updateProfile(req, res) {
     }
 
     const userWithEmail = await findUserByEmail(nextEmail);
-    if (userWithEmail && String(getUserId(userWithEmail)) !== String(req.userId)) {
+    if (userWithEmail && String(getUserId(userWithEmail)) !== String(getUserId(currentUser))) {
       return res.status(400).json({ mensagem: "Email ja esta em uso" });
     }
 
