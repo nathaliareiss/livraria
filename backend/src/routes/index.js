@@ -14,6 +14,10 @@ const routes = (app) => {
     res.status(200).send({ titulo: "Ok, aqui estamos!" });
   });
 
+  app.route("/health").get((req, res) => {
+    res.status(200).json({ ok: true });
+  });
+
   if (process.env.NODE_ENV !== "production") {
     app.use(teste);
   }

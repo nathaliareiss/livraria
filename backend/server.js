@@ -18,7 +18,7 @@ async function bootstrap() {
 
   const { default: app } = await import("./src/app.js");
   const server = app.listen(port, () => {
-    console.log(`Servidor escutando em http://localhost:${port}`);
+    console.log(`Servidor escutando em http://0.0.0.0:${port}`);
   });
 
   server.on("error", (error) => {
