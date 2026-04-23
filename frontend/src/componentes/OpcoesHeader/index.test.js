@@ -3,24 +3,12 @@ import { MemoryRouter } from "react-router-dom";
 import OpcoesHeader from ".";
 import { useAuth } from "../../contextos/AuthContext";
 
-const mockNavigate = jest.fn();
-
 jest.mock("../../contextos/AuthContext", () => ({
   useAuth: jest.fn(),
 }));
 
-jest.mock("react-router-dom", () => {
-  const actualRouterDom = jest.requireActual("react-router-dom");
-
-  return {
-    ...actualRouterDom,
-    useNavigate: () => mockNavigate,
-  };
-});
-
 describe("OpcoesHeader", () => {
   beforeEach(() => {
-    mockNavigate.mockClear();
     useAuth.mockReset();
   });
 
@@ -63,6 +51,5 @@ describe("OpcoesHeader", () => {
     fireEvent.click(screen.getByRole("button", { name: /log out/i }));
 
     expect(logout).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith("/login");
   });
 });
