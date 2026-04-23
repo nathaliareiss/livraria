@@ -9,8 +9,8 @@ function getTransporter() {
 
   const host = process.env.SMTP_HOST;
   const port = Number(process.env.SMTP_PORT || 587);
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS?.replace(/\s+/g, "");
   const secure = String(process.env.SMTP_SECURE || "").toLowerCase() === "true" || port === 465;
 
   if (!host || !user || !pass) {
@@ -31,7 +31,7 @@ function getTransporter() {
 }
 
 export async function sendPasswordResetCodeEmail({ to, code }) {
-  const from = process.env.SMTP_FROM || process.env.SMTP_USER;
+  const from = (process.env.SMTP_FROM || process.env.SMTP_USER || "").trim();
 
   if (!from) {
     throw new Error("Defina SMTP_FROM ou SMTP_USER para enviar emails.");
