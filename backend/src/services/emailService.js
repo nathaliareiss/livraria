@@ -1,32 +1,50 @@
 import nodemailer from "nodemailer";
 
 let cachedTransporter = null;
+let transporterCheckPromise = null;
 
-function getTransporter() {
+async function getTransporter() {
   if (cachedTransporter) {
+    if (!transporterCheckPromise) {
+      transporterCheckPromise = cachedTransporter.verify();
+    }
+
+    await transporterCheckPromise;
     return cachedTransporter;
   }
 
   const host = process.env.SMTP_HOST;
-  const port = 587;
   const user = process.env.SMTP_USER?.trim();
   const pass = process.env.SMTP_PASS?.replace(/\s+/g, "");
   const secure = String(process.env.SMTP_SECURE || "").toLowerCase() === "true";
+  const useGmailService =
+    String(process.env.SMTP_SERVICE || "").toLowerCase() === "gmail" ||
+    String(host || "").toLowerCase().includes("gmail.com");
 
   if (!host || !user || !pass) {
     throw new Error("Servidor de email nao configurado. Defina SMTP_HOST, SMTP_USER e SMTP_PASS.");
   }
 
-  cachedTransporter = nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: {
-      user,
-      pass,
-    },
-  });
+  cachedTransporter = useGmailService
+    ? nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user,
+          pass,
+        },
+      })
+    : nodemailer.createTransport({
+        host,
+        port: 587,
+        secure,
+        auth: {
+          user,
+          pass,
+        },
+      });
 
+  transporterCheckPromise = cachedTransporter.verify();
+  await transporterCheckPromise;
   return cachedTransporter;
 }
 
@@ -37,9 +55,9 @@ export async function sendPasswordResetCodeEmail({ to, code }) {
     throw new Error("Defina SMTP_FROM ou SMTP_USER para enviar emails.");
   }
 
-  const transporter = getTransporter();
+  const transporter = await getTransporter();
 
-  await transporter.sendMail({
+  const info = await transporter.sendMail({
     from,
     to,
     subject: "Codigo de recuperacao da senha",
@@ -62,4 +80,12 @@ export async function sendPasswordResetCodeEmail({ to, code }) {
       </div>
     `,
   });
+
+  if (process.env.NODE_ENV !== "production") {
+    console.log("Email de recuperacao enviado", {
+      messageId: info.messageId,
+      accepted: info.accepted,
+      rejected: info.rejected,
+    });
+  }
 }
