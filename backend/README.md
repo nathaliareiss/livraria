@@ -21,6 +21,14 @@ Crie o arquivo `.env` dentro de `backend/` com base em `.env.example`.
 - `JWT_SECRET`
 - `FRONTEND_URL`
 - `BACKEND_URL`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_FROM`
+
+O fluxo de recuperacao de senha envia o codigo por email. Sem essas variaveis de SMTP configuradas, o envio nao acontece.
 
 Se voce usar MongoDB Atlas:
 

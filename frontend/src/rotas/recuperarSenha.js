@@ -134,17 +134,6 @@ const StatusBox = styled.div`
   color: ${(props) => (props.$tone === "success" ? colors.success : "#a16207")};
 `;
 
-const CodeBox = styled.div`
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: #fff;
-  border: 1px dashed #86efac;
-  color: ${colors.success};
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-align: center;
-`;
-
 const BackLink = styled(Link)`
   color: ${colors.primaryHover};
   font-size: 14px;
@@ -173,7 +162,6 @@ export default function RecuperarSenha() {
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
-  const [codigoGerado, setCodigoGerado] = useState("");
   const [etapa, setEtapa] = useState("email");
   const [loading, setLoading] = useState("");
   const navigate = useNavigate();
@@ -190,7 +178,6 @@ export default function RecuperarSenha() {
       setCodigo("");
       setNovaSenha("");
       setConfirmarSenha("");
-      setCodigoGerado("");
     }
     resetMensagens();
   }
@@ -208,10 +195,9 @@ export default function RecuperarSenha() {
     try {
       const normalizedEmail = email.trim().toLowerCase();
       const res = await api.post("/esqueci-minha-senha", { email: normalizedEmail });
-      setCodigoGerado(res.data.recoveryCode || "");
       setCodigo("");
       setEtapa("codigo");
-      setSucesso("Codigo de recuperacao gerado. Digite o codigo recebido para continuar.");
+      setSucesso(res.data.mensagem || "Se o email estiver cadastrado, o codigo foi enviado.");
     } catch (err) {
       setErro(err.response?.data?.mensagem || "Nao foi possivel gerar o codigo de recuperacao.");
     } finally {
@@ -259,7 +245,6 @@ export default function RecuperarSenha() {
       setCodigo("");
       setNovaSenha("");
       setConfirmarSenha("");
-      setCodigoGerado("");
       setEtapa("email");
       setTimeout(() => navigate("/login"), 1200);
     } catch (err) {
@@ -278,7 +263,7 @@ export default function RecuperarSenha() {
       <Center>
         <AuthCard>
           <Title>Recover password</Title>
-          <Subtitle>First we confirm your email, then your code, and only after that we open the new password fields.</Subtitle>
+          <Subtitle>First we confirm your email, then the code that arrived by email, and only after that we open the new password fields.</Subtitle>
 
           <Stepper aria-label="Recovery steps">
             <Step $active={etapa === "email" || etapa === "codigo" || etapa === "senha"}>
@@ -304,7 +289,7 @@ export default function RecuperarSenha() {
 
           <Section>
             <SectionTitle>1. Email</SectionTitle>
-            <SectionText>Digite o email cadastrado. Depois disso, o sistema gera o codigo de recuperacao.</SectionText>
+            <SectionText>Digite o email cadastrado. Se ele existir, o sistema envia o codigo para a sua caixa de entrada.</SectionText>
             <Form onSubmit={enviarCodigo}>
               <FieldRow>
                 <Input
@@ -316,23 +301,15 @@ export default function RecuperarSenha() {
                 />
               </FieldRow>
               <SecondaryButton type="submit" disabled={isEmailLoading || !email}>
-                {isEmailLoading ? "Gerando codigo..." : "Gerar codigo"}
+                {isEmailLoading ? "Enviando codigo..." : "Enviar codigo"}
               </SecondaryButton>
             </Form>
           </Section>
 
-          {codigoGerado && (
-            <StatusBox $tone="success" style={{ marginTop: 16 }}>
-              <strong>Codigo de teste gerado no backend</strong>
-              <CodeBox>{codigoGerado}</CodeBox>
-              <span>Copie ou digite esse codigo na etapa seguinte. Ele expira em 15 minutos.</span>
-            </StatusBox>
-          )}
-
           {etapa !== "email" && (
             <Section style={{ marginTop: 16 }}>
               <SectionTitle>2. Codigo</SectionTitle>
-              <SectionText>Digite o codigo para liberar a etapa de redefinicao.</SectionText>
+              <SectionText>Digite o codigo que chegou no seu email para liberar a redefinicao.</SectionText>
               <Form onSubmit={validarCodigo}>
                 <FieldRow>
                   <Input

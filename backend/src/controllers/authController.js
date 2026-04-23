@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import db from "../config/dbConnect.js";
 import User from "../models/usuario.js";
+import { sendPasswordResetCodeEmail } from "../services/emailService.js";
 import {
   clearPasswordResetCode as clearLocalPasswordResetCode,
   createUser as createLocalUser,
@@ -220,23 +221,30 @@ export async function requestPasswordReset(req, res) {
 
     const user = await findUserByEmail(normalizedEmail);
 
-    if (!user) {
-      return res.status(404).json({ mensagem: "Usuario nao encontrado" });
+    if (user) {
+      const recoveryCode = generateRecoveryCode();
+      const codeHash = await bcrypt.hash(recoveryCode, 10);
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+      try {
+        await setPasswordResetCode(normalizedEmail, codeHash, expiresAt);
+        await sendPasswordResetCodeEmail({ to: normalizedEmail, code: recoveryCode });
+      } catch (emailError) {
+        await clearPasswordResetCode(normalizedEmail);
+        throw emailError;
+      }
     }
 
-    const recoveryCode = generateRecoveryCode();
-    const codeHash = await bcrypt.hash(recoveryCode, 10);
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-
-    await setPasswordResetCode(normalizedEmail, codeHash, expiresAt);
-
     res.json({
-      mensagem: "Codigo de recuperacao gerado com sucesso",
-      recoveryCode,
-      expiresAt,
+      mensagem:
+        "Se o email estiver cadastrado, um codigo de recuperacao foi enviado para sua caixa de entrada.",
     });
   } catch (erro) {
-    res.status(500).json({ mensagem: "Erro ao gerar codigo de recuperacao" });
+    res.status(500).json({
+      mensagem:
+        erro?.message ||
+        "Erro ao enviar o codigo de recuperacao. Verifique a configuracao do servidor de email.",
+    });
   }
 }
 
