@@ -11,7 +11,7 @@ jest.mock("react-router-dom", () => ({
     return React.createElement("a", { href: to, ...props }, children);
   },
   useNavigate: () => mockNavigate,
-}));
+}), { virtual: true });
 
 jest.mock("../../contextos/AuthContext", () => ({
   useAuth: jest.fn(),
