@@ -52,6 +52,17 @@ export function AuthProvider({ children }) {
     setUser(userData);
   }
 
+  function updateUser(userData) {
+    if (!userData) {
+      localStorage.removeItem("user");
+      setUser(null);
+      return;
+    }
+
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  }
+
   // Função para fazer logout (remove token e atualiza estado)
   function logout() {
     localStorage.removeItem("token");
@@ -65,6 +76,7 @@ export function AuthProvider({ children }) {
     isLoggedIn,  // se está logado ou não
     user,        // dados do usuário
     login,       // função para fazer login
+    updateUser,  // atualiza os dados do usuário salvo
     logout,      // função para fazer logout
   };
 

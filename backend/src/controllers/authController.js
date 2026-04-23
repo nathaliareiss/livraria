@@ -7,7 +7,9 @@ import {
   clearPasswordResetCode as clearLocalPasswordResetCode,
   createUser as createLocalUser,
   findUserByEmail as findLocalUserByEmail,
+  findUserById as findLocalUserById,
   setPasswordResetCode as setLocalPasswordResetCode,
+  updateUserProfileById as updateLocalUserProfileById,
   updatePasswordByEmail as updateLocalPasswordByEmail,
 } from "../services/localUserStore.js";
 
@@ -40,6 +42,10 @@ async function findUserByEmail(email) {
   return isMongoAvailable()
     ? User.findOne({ email: buildMongoEmailMatch(normalizedEmail) })
     : findLocalUserByEmail(normalizedEmail);
+}
+
+async function findUserById(userId) {
+  return isMongoAvailable() ? User.findById(userId) : findLocalUserById(userId);
 }
 
 async function setPasswordResetCode(email, codeHash, expiresAt) {
@@ -92,6 +98,30 @@ async function updatePasswordByEmail(email, senhaHash) {
   }
 
   return updateLocalPasswordByEmail(normalizedEmail, senhaHash);
+}
+
+async function updateUserProfile(userId, updates) {
+  if (isMongoAvailable()) {
+    return User.findByIdAndUpdate(userId, updates, {
+      new: true,
+      runValidators: true,
+    });
+  }
+
+  return updateLocalUserProfileById(userId, updates);
+}
+
+function serializeUser(user) {
+  if (!user) {
+    return null;
+  }
+
+  return {
+    id: getUserId(user),
+    nome: user.nome,
+    email: user.email,
+    dataNascimento: user.dataNascimento ? new Date(user.dataNascimento).toISOString() : null,
+  };
 }
 
 async function getValidPasswordResetUser(email, recoveryCode) {
@@ -207,6 +237,60 @@ export async function login(req, res, next) {
     });
   } catch (erro) {
     next(erro);
+  }
+}
+
+export async function getProfile(req, res) {
+  try {
+    const user = await findUserById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ mensagem: "Usuario nao encontrado" });
+    }
+
+    res.json({ user: serializeUser(user) });
+  } catch (erro) {
+    res.status(500).json({ mensagem: "Erro ao carregar perfil" });
+  }
+}
+
+export async function updateProfile(req, res) {
+  try {
+    const { nome, email, dataNascimento } = req.body;
+    const normalizedNome = String(nome || "").trim();
+    const normalizedEmail = normalizeEmail(email).toLowerCase();
+
+    if (!normalizedNome || !normalizedEmail || !dataNascimento) {
+      return res.status(400).json({ mensagem: "Preencha nome, email e data de nascimento" });
+    }
+
+    const nascimento = new Date(dataNascimento);
+    if (Number.isNaN(nascimento.getTime())) {
+      return res.status(400).json({ mensagem: "Data de nascimento invalida" });
+    }
+
+    const currentUser = await findUserById(req.userId);
+    if (!currentUser) {
+      return res.status(404).json({ mensagem: "Usuario nao encontrado" });
+    }
+
+    const userWithEmail = await findUserByEmail(normalizedEmail);
+    if (userWithEmail && String(getUserId(userWithEmail)) !== String(req.userId)) {
+      return res.status(400).json({ mensagem: "Email ja esta em uso" });
+    }
+
+    const updatedUser = await updateUserProfile(req.userId, {
+      nome: normalizedNome,
+      email: normalizedEmail,
+      dataNascimento: nascimento,
+    });
+
+    res.json({
+      mensagem: "Perfil atualizado com sucesso",
+      user: serializeUser(updatedUser),
+    });
+  } catch (erro) {
+    res.status(500).json({ mensagem: "Erro ao atualizar perfil" });
   }
 }
 
