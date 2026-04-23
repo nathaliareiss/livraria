@@ -40,8 +40,10 @@ function Home() {
   const successTimers = useRef({});
 
   useEffect(() => {
+    const timers = successTimers.current;
+
     return () => {
-      Object.values(successTimers.current).forEach((timerId) => clearTimeout(timerId));
+      Object.values(timers).forEach((timerId) => clearTimeout(timerId));
     };
   }, []);
 
