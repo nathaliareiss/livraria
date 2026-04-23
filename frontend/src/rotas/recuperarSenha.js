@@ -206,7 +206,8 @@ export default function RecuperarSenha() {
     setLoading("email");
 
     try {
-      const res = await api.post("/esqueci-minha-senha", { email });
+      const normalizedEmail = email.trim().toLowerCase();
+      const res = await api.post("/esqueci-minha-senha", { email: normalizedEmail });
       setCodigoGerado(res.data.recoveryCode || "");
       setCodigo("");
       setEtapa("codigo");
@@ -224,9 +225,10 @@ export default function RecuperarSenha() {
     setLoading("codigo");
 
     try {
+      const normalizedEmail = email.trim().toLowerCase();
       await api.post("/validar-codigo-recuperacao", {
-        email,
-        recoveryCode: codigo,
+        email: normalizedEmail,
+        recoveryCode: codigo.trim(),
       });
 
       setEtapa("senha");
@@ -244,9 +246,10 @@ export default function RecuperarSenha() {
     setLoading("senha");
 
     try {
+      const normalizedEmail = email.trim().toLowerCase();
       await api.post("/redefinir-senha", {
-        email,
-        recoveryCode: codigo,
+        email: normalizedEmail,
+        recoveryCode: codigo.trim(),
         novaSenha,
         confirmarSenha,
       });

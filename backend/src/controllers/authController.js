@@ -22,16 +22,31 @@ function generateRecoveryCode() {
   return String(Math.floor(100000 + Math.random() * 900000));
 }
 
+function normalizeEmail(email) {
+  return String(email || "").trim();
+}
+
+function buildMongoEmailMatch(email) {
+  const normalizedEmail = normalizeEmail(email);
+  const escapedEmail = normalizedEmail.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  return new RegExp(`^${escapedEmail}$`, "i");
+}
+
 async function findUserByEmail(email) {
+  const normalizedEmail = normalizeEmail(email);
+
   return isMongoAvailable()
-    ? User.findOne({ email })
-    : findLocalUserByEmail(email);
+    ? User.findOne({ email: buildMongoEmailMatch(normalizedEmail) })
+    : findLocalUserByEmail(normalizedEmail);
 }
 
 async function setPasswordResetCode(email, codeHash, expiresAt) {
+  const normalizedEmail = normalizeEmail(email);
+
   if (isMongoAvailable()) {
     return User.findOneAndUpdate(
-      { email },
+      { email: buildMongoEmailMatch(normalizedEmail) },
       {
         passwordResetCodeHash: codeHash,
         passwordResetExpiresAt: expiresAt,
@@ -40,13 +55,15 @@ async function setPasswordResetCode(email, codeHash, expiresAt) {
     );
   }
 
-  return setLocalPasswordResetCode(email, codeHash, expiresAt);
+  return setLocalPasswordResetCode(normalizedEmail, codeHash, expiresAt);
 }
 
 async function clearPasswordResetCode(email) {
+  const normalizedEmail = normalizeEmail(email);
+
   if (isMongoAvailable()) {
     return User.findOneAndUpdate(
-      { email },
+      { email: buildMongoEmailMatch(normalizedEmail) },
       {
         passwordResetCodeHash: null,
         passwordResetExpiresAt: null,
@@ -55,13 +72,15 @@ async function clearPasswordResetCode(email) {
     );
   }
 
-  return clearLocalPasswordResetCode(email);
+  return clearLocalPasswordResetCode(normalizedEmail);
 }
 
 async function updatePasswordByEmail(email, senhaHash) {
+  const normalizedEmail = normalizeEmail(email);
+
   if (isMongoAvailable()) {
     return User.findOneAndUpdate(
-      { email },
+      { email: buildMongoEmailMatch(normalizedEmail) },
       {
         senha: senhaHash,
         passwordResetCodeHash: null,
@@ -71,7 +90,7 @@ async function updatePasswordByEmail(email, senhaHash) {
     );
   }
 
-  return updateLocalPasswordByEmail(email, senhaHash);
+  return updateLocalPasswordByEmail(normalizedEmail, senhaHash);
 }
 
 async function getValidPasswordResetUser(email, recoveryCode) {
@@ -107,8 +126,9 @@ async function getValidPasswordResetUser(email, recoveryCode) {
 export async function register(req, res) {
   try {
     const { nome, dataNascimento, email, senha } = req.body;
+    const normalizedEmail = normalizeEmail(email).toLowerCase();
 
-    const usuarioExiste = await findUserByEmail(email);
+    const usuarioExiste = await findUserByEmail(normalizedEmail);
 
     if (usuarioExiste) {
       return res.status(400).json({ mensagem: "Usuário já existe" });
@@ -124,13 +144,13 @@ export async function register(req, res) {
       ? await User.create({
           nome,
           dataNascimento: dataNascimento ? new Date(dataNascimento) : undefined,
-          email,
+          email: normalizedEmail,
           senha: senhaHash,
         })
       : await createLocalUser({
           nome,
           dataNascimento,
-          email,
+          email: normalizedEmail,
           senha: senhaHash,
         });
 
@@ -158,8 +178,9 @@ export async function register(req, res) {
 export async function login(req, res, next) {
   try {
     const { email, senha } = req.body;
+    const normalizedEmail = normalizeEmail(email).toLowerCase();
 
-    const user = await findUserByEmail(email);
+    const user = await findUserByEmail(normalizedEmail);
 
     if (!user) {
       return res.status(401).json({ mensagem: "Email ou senha inválidos" });
@@ -191,12 +212,13 @@ export async function login(req, res, next) {
 export async function requestPasswordReset(req, res) {
   try {
     const { email } = req.body;
+    const normalizedEmail = normalizeEmail(email).toLowerCase();
 
-    if (!email) {
+    if (!normalizedEmail) {
       return res.status(400).json({ mensagem: "Informe seu email" });
     }
 
-    const user = await findUserByEmail(email);
+    const user = await findUserByEmail(normalizedEmail);
 
     if (!user) {
       return res.status(404).json({ mensagem: "Usuario nao encontrado" });
@@ -206,7 +228,7 @@ export async function requestPasswordReset(req, res) {
     const codeHash = await bcrypt.hash(recoveryCode, 10);
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
-    await setPasswordResetCode(email, codeHash, expiresAt);
+    await setPasswordResetCode(normalizedEmail, codeHash, expiresAt);
 
     res.json({
       mensagem: "Codigo de recuperacao gerado com sucesso",
@@ -221,12 +243,13 @@ export async function requestPasswordReset(req, res) {
 export async function validatePasswordResetCode(req, res) {
   try {
     const { email, recoveryCode } = req.body;
+    const normalizedEmail = normalizeEmail(email).toLowerCase();
 
-    if (!email || !recoveryCode) {
+    if (!normalizedEmail || !recoveryCode) {
       return res.status(400).json({ mensagem: "Informe email e codigo de recuperacao" });
     }
 
-    const result = await getValidPasswordResetUser(email, recoveryCode);
+    const result = await getValidPasswordResetUser(normalizedEmail, recoveryCode);
     if (result.error) {
       return res.status(result.error.status).json({ mensagem: result.error.mensagem });
     }
@@ -240,8 +263,9 @@ export async function validatePasswordResetCode(req, res) {
 export async function resetPassword(req, res) {
   try {
     const { email, recoveryCode, novaSenha, confirmarSenha } = req.body;
+    const normalizedEmail = normalizeEmail(email).toLowerCase();
 
-    if (!email || !recoveryCode || !novaSenha || !confirmarSenha) {
+    if (!normalizedEmail || !recoveryCode || !novaSenha || !confirmarSenha) {
       return res.status(400).json({ mensagem: "Preencha todos os campos" });
     }
 
@@ -253,14 +277,14 @@ export async function resetPassword(req, res) {
       return res.status(400).json({ mensagem: "Senha deve ter pelo menos 8 caracteres" });
     }
 
-    const result = await getValidPasswordResetUser(email, recoveryCode);
+    const result = await getValidPasswordResetUser(normalizedEmail, recoveryCode);
     if (result.error) {
       return res.status(result.error.status).json({ mensagem: result.error.mensagem });
     }
 
     const senhaHash = await bcrypt.hash(novaSenha, 10);
-    await updatePasswordByEmail(email, senhaHash);
-    await clearPasswordResetCode(email);
+    await updatePasswordByEmail(normalizedEmail, senhaHash);
+    await clearPasswordResetCode(normalizedEmail);
 
     res.json({ mensagem: "Senha alterada com sucesso" });
   } catch (erro) {
