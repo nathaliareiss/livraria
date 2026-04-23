@@ -1,0 +1,212 @@
+:root {
+  --fallback-background: #f5f7fb;
+  --fallback-background-alt: #eef2f7;
+  --fallback-surface: #ffffff;
+  --fallback-surface-alt: #f8fafc;
+  --fallback-text: #0f172a;
+  --fallback-muted: #475569;
+  --fallback-subtle: #64748b;
+  --fallback-border: #dbe3ee;
+  --fallback-primary: #1d4ed8;
+  --fallback-primary-hover: #1e40af;
+  --fallback-primary-soft: #dbeafe;
+  --fallback-accent: #0f766e;
+  --fallback-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  --fallback-shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(29, 78, 216, 0.06), transparent 28%),
+    linear-gradient(180deg, var(--fallback-background) 0%, var(--fallback-background-alt) 100%);
+  color: var(--fallback-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body, button, input, textarea, select {
+  font-family: "Manrope", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page-shell {
+  min-height: 100vh;
+  color: var(--fallback-text);
+}
+
+.page-section {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.surface-card {
+  background: var(--fallback-surface);
+  border: 1px solid var(--fallback-border);
+  border-radius: 24px;
+  box-shadow: var(--fallback-shadow-soft);
+}
+
+.primary-button,
+.secondary-button {
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.primary-button {
+  background: var(--fallback-primary);
+  color: #fff;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: var(--fallback-primary-hover);
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  background: var(--fallback-surface-alt);
+  color: var(--fallback-text);
+  border-color: var(--fallback-border);
+}
+
+.secondary-button:hover:not(:disabled) {
+  background: var(--fallback-primary-soft);
+  color: var(--fallback-primary-hover);
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(219, 227, 238, 0.9);
+}
+
+.app-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 78px;
+}
+
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 16px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--fallback-text);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.brand-logo-image {
+  width: 38px;
+  height: 38px;
+}
+
+.header-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.header-option-item {
+  display: flex;
+}
+
+.header-nav-link {
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--fallback-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.header-nav-link:hover {
+  background: var(--fallback-surface-alt);
+  color: var(--fallback-primary-hover);
+}
+
+.header-logout-button {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--fallback-border);
+  background: var(--fallback-surface-alt);
+  color: var(--fallback-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.header-logout-button:hover {
+  background: var(--fallback-primary-soft);
+  color: var(--fallback-primary-hover);
+}
+
+input {
+  width: 100%;
+  border: 1px solid var(--fallback-border);
+  background: var(--fallback-surface-alt);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: var(--fallback-text);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--fallback-primary);
+  box-shadow: 0 0 0 4px var(--fallback-primary-soft);
+}
+
+main > section {
+  padding: 40px 0 56px;
+}
+
+section {
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 0 0 8px;
+  letter-spacing: -0.04em;
+}
+
+p {
+  line-height: 1.6;
+}

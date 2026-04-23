@@ -5,7 +5,7 @@ import Logo from "../Logo";
 import { PageSection } from "../ui";
 import { colors } from "../../styles/theme";
 
-const HeaderContainer = styled.header`
+const HeaderContainer = styled.header.attrs({ className: "app-header" })`
   position: sticky;
   top: 0;
   z-index: 40;
@@ -14,7 +14,7 @@ const HeaderContainer = styled.header`
   border-bottom: 1px solid rgba(219, 227, 238, 0.9);
 `;
 
-const HeaderInner = styled(PageSection)`
+const HeaderInner = styled(PageSection).attrs({ className: "app-header-inner" })`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,7 +22,7 @@ const HeaderInner = styled(PageSection)`
   min-height: 78px;
 `;
 
-const BrandLink = styled(Link)`
+const BrandLink = styled(Link).attrs({ className: "brand-link" })`
   display: inline-flex;
   align-items: center;
   border-radius: 16px;

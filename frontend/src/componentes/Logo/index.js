@@ -2,7 +2,7 @@ import logo from "../imagens/logo.png";
 import styled from "styled-components";
 import { colors } from "../../styles/theme";
 
-const LogoContainer = styled.div`
+const LogoContainer = styled.div.attrs({ className: "brand-logo" })`
   display: flex;
   align-items: center;
   gap: 12px;
@@ -12,7 +12,7 @@ const LogoContainer = styled.div`
   letter-spacing: -0.03em;
 `;
 
-const LogoImage = styled.img`
+const LogoImage = styled.img.attrs({ className: "brand-logo-image" })`
   width: 38px;
   height: 38px;
 `;

@@ -3,18 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contextos/AuthContext";
 import { colors } from "../../styles/theme";
 
-const Opcoes = styled.ul`
+const Opcoes = styled.ul.attrs({ className: "header-options" })`
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 `;
 
-const Item = styled.li`
+const Item = styled.li.attrs({ className: "header-option-item" })`
   display: flex;
 `;
 
-const NavLink = styled(Link)`
+const NavLink = styled(Link).attrs({ className: "header-nav-link" })`
   padding: 10px 14px;
   border-radius: 999px;
   color: ${colors.text};
@@ -35,7 +35,7 @@ const NavLink = styled(Link)`
   }
 `;
 
-const LogoutButton = styled.button`
+const LogoutButton = styled.button.attrs({ className: "header-logout-button" })`
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid ${colors.border};
