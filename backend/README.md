@@ -1,50 +1,39 @@
-# Backend da Livraria
+# Livraria Backend
 
-API em Node.js e Express responsavel por autenticacao, cadastro de usuarios, favoritos, leitura e integracoes com Google.
+This is the Node.js and Express API for Livraria. It handles authentication, user profile data, password recovery by email, library-related flows, and Google integrations.
 
-## Funcionalidades
+## Features
 
-- cadastro e login com JWT
-- persistencia de dados no MongoDB
-- favoritos e estante pessoal
-- controle de leitura
-- integracao com Google Calendar
+- Registration and login with JWT
+- Editable user profile
+- Password reset code sent by email
+- MongoDB persistence with a local fallback store
+- Favorites and reading-state endpoints
+- Google Calendar integration
 
-## Configuracao local
+## Environment Variables
 
-Crie o arquivo `.env` dentro de `backend/` com base em `.env.example`.
+Create `backend/.env` from `backend/.env.example`.
 
-### Variaveis principais
+### Required
 
-- `STRING_CONEXAO_DB` ou `MONGO_URI`
-- `PORT`
+- `STRING_CONEXAO_DB` or `MONGO_URI`
 - `JWT_SECRET`
 - `FRONTEND_URL`
 - `BACKEND_URL`
 - `SMTP_HOST`
-- `SMTP_SECURE`
 - `SMTP_USER`
 - `SMTP_PASS`
 - `SMTP_FROM`
 
-O fluxo de recuperacao de senha envia o codigo por email. Sem essas variaveis de SMTP configuradas, o envio nao acontece.
-O backend usa a porta 587 por padrao no Nodemailer.
+### Optional
 
-Se voce usar MongoDB Atlas:
+- `PORT`
+- `SMTP_SECURE`
 
-- libere o IP da sua maquina em Network Access
-- confira usuario e senha da string
-- veja se o cluster esta ativo
+The backend uses port `8001` by default, and Nodemailer uses port `587` unless configured otherwise in the service.
 
-Se o driver `mongodb+srv://` estiver falhando com erro de DNS, use o Mongo local para desenvolvimento:
-
-```env
-STRING_CONEXAO_DB=mongodb://127.0.0.1:27017/livraria
-```
-
-Nesse caso, o MongoDB precisa estar instalado e rodando na sua maquina.
-
-## Como rodar
+## Local Setup
 
 ```bash
 cd backend
@@ -52,8 +41,14 @@ npm install
 npm run dev
 ```
 
-A API sobe em `http://localhost:8001` por padrao.
+## Scripts
 
-## Observacao para GitHub
+- `npm run dev` - start the API in development mode
+- `npm start` - run the API in production mode
+- `npm run lint` - run ESLint
 
-Nao publique o `.env` real. Use apenas `.env.example` com valores ficticios.
+## Operational Notes
+
+- Do not commit real `.env` values to the repository.
+- The password recovery flow requires a working SMTP account.
+- The project can fall back to local user storage if MongoDB is not available.

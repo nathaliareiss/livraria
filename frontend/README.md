@@ -1,94 +1,51 @@
 # Livraria Frontend
 
-Interface web da plataforma Livraria, feita em React, para organizar livros, favoritos, leitura e integracoes com a API do projeto.
+This is the React interface for the Livraria project. It provides the user experience for registration, login, profile editing, password recovery, library management, and reading tracking.
 
-## Visao geral
+## Main Routes
 
-Este frontend foi criado para oferecer uma experiencia visual mais limpa e moderna para o usuario, com foco nas principais tarefas do app:
+- `/` - Home
+- `/cadastre-se` - Registration
+- `/login` - Login
+- `/recuperar-senha` - Password recovery
+- `/perfil` - User profile
+- `/calendario` - Calendar
+- `/estante` - Personal library
 
-- criar conta e fazer login
-- buscar livros na API externa
-- salvar livros na estante pessoal
-- marcar favoritos e livros que quer ler
-- acompanhar o progresso de leitura
-- acessar o calendario e a integracao com Google
-
-O frontend depende do backend para autenticao, persistencia e integracoes. Sem a API ativa, as telas carregam, mas as operacoes que salvam dados nao funcionam.
-
-## Tecnologias
+## Tech Stack
 
 - React 19
 - React Router DOM
-- Styled Components
+- styled-components
 - Axios
 
-## Estrutura de pastas
-
-- `src/componentes/` - componentes reutilizaveis da interface
-- `src/contextos/` - contexto global de autenticacao
-- `src/rotas/` - paginas principais da aplicacao
-- `src/servicos/` - cliente HTTP e servicos de API
-- `src/styles/` - tema, cores e tipografia
-
-## Paginas disponiveis
-
-- `/` - home
-- `/cadastre-se` - cadastro de usuario
-- `/login` - login
-- `/perfil` - perfil do usuario
-- `/favoritos` - livros favoritos
-- `/calendario` - agenda e eventos de leitura
-- `/estante` - biblioteca pessoal
-
-## Como rodar localmente
-
-1. Instale as dependencias:
+## Local Setup
 
 ```bash
 cd frontend
 npm install
-```
-
-2. Configure a URL da API em um arquivo `.env` dentro de `frontend/`:
-
-```bash
-REACT_APP_API_URL=http://localhost:8001
-```
-
-3. Inicie o frontend:
-
-```bash
 npm start
 ```
 
-Por padrao, a aplicacao roda em `http://localhost:3000`.
+Create `frontend/.env` from `frontend/.env.example`:
 
-## Backend necessario
+```env
+REACT_APP_API_URL=http://localhost:8001
+```
 
-Para o frontend funcionar de ponta a ponta, o backend tambem precisa estar ativo. O projeto espera a API em `http://localhost:8001`, a nao ser que `REACT_APP_API_URL` aponte para outro endereco.
+## Notes
 
-Se voce estiver publicando o projeto, ajuste estas variaveis:
+- The frontend expects the backend API to be available.
+- Authentication state is stored in `localStorage` and kept in sync through the auth context.
+- The profile screen supports editing the saved user information.
 
-- `REACT_APP_API_URL` no frontend
-- `FRONTEND_URL` e `BACKEND_URL` no backend
+## Build
 
-## Scripts disponiveis
+```bash
+npm run build
+```
 
-- `npm start` - executa a aplicacao em modo desenvolvimento
-- `npm run build` - gera a versao de producao
-- `npm test` - executa os testes
-- `npm run eject` - expulsa a configuracao do Create React App
+## Deployment Tips
 
-## Fluxo principal
-
-1. O usuario acessa a tela de cadastro ou login.
-2. O frontend envia os dados para a API.
-3. O backend valida e retorna o token JWT.
-4. O token fica salvo no navegador e passa a ser usado nas requisicoes seguintes.
-5. As telas de estante, favoritos, leitura e calendario passam a refletir os dados do usuario logado.
-
-## Observacoes para deploy
-
-- Se o frontend for publicado separado do backend, configure `REACT_APP_API_URL` com a URL publica da API.
-- Garanta que o backend aceite a origem do frontend em `FRONTEND_URL`.
-- Nao versionar arquivos `.env` reais no GitHub. Use sempre exemplos com valores de referencia.
+- Point `REACT_APP_API_URL` to the public API URL in production.
+- Make sure the backend allows the deployed frontend origin through `FRONTEND_URL`.
