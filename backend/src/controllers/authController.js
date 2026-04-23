@@ -31,7 +31,12 @@ function normalizeEmail(email) {
 }
 
 function getRequestEmail(req) {
-  return normalizeEmail(req.headers["x-user-email"]);
+  return normalizeEmail(
+    req.query?.email ||
+      req.body?.currentEmail ||
+      req.body?.email ||
+      req.headers["x-user-email"]
+  );
 }
 
 function getRequestedUserId(req) {
