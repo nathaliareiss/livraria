@@ -189,22 +189,31 @@ function getInitials(nome) {
     .join("");
 }
 
+function buildFormFromUser(userData) {
+  return {
+    nome: userData?.nome || "",
+    email: userData?.email || "",
+    dataNascimento: toDateInputValue(userData?.dataNascimento),
+  };
+}
+
 export default function Perfil() {
-  const [profile, setProfile] = useState(null);
-  const [form, setForm] = useState({
-    nome: "",
-    email: "",
-    dataNascimento: "",
-  });
+  const { user: authUser, logout, updateUser } = useAuth();
+  const [profile, setProfile] = useState(() => authUser || null);
+  const [form, setForm] = useState(() => buildFormFromUser(authUser));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
   const navigate = useNavigate();
-  const { logout, updateUser } = useAuth();
 
   useEffect(() => {
     let active = true;
+
+    if (authUser) {
+      setProfile(authUser);
+      setForm(buildFormFromUser(authUser));
+    }
 
     async function carregarPerfil() {
       try {
@@ -213,11 +222,7 @@ export default function Perfil() {
 
         const userData = res.data.user;
         setProfile(userData);
-        setForm({
-          nome: userData.nome || "",
-          email: userData.email || "",
-          dataNascimento: toDateInputValue(userData.dataNascimento),
-        });
+        setForm(buildFormFromUser(userData));
       } catch (err) {
         if (!active) return;
 
@@ -227,7 +232,10 @@ export default function Perfil() {
           return;
         }
 
-        setErro(err.response?.data?.mensagem || "Nao foi possivel carregar seu perfil.");
+        setErro(
+          err.response?.data?.mensagem ||
+            "Nao foi possivel carregar seu perfil. Mostrando os dados salvos localmente."
+        );
       } finally {
         if (active) {
           setLoading(false);
@@ -240,7 +248,7 @@ export default function Perfil() {
     return () => {
       active = false;
     };
-  }, [logout, navigate]);
+  }, [authUser, logout, navigate]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -324,6 +332,7 @@ export default function Perfil() {
           <Card>
             <Title>My profile</Title>
             {erro && <Message $tone="error">{erro}</Message>}
+            {!erro && <Message $tone="error">Nao foi possivel carregar seu perfil.</Message>}
           </Card>
         </Wrapper>
       </PageShell>
