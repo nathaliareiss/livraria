@@ -287,8 +287,11 @@ export default function Perfil() {
       const payload = {
         nome: form.nome.trim(),
         email: form.email.trim().toLowerCase(),
-        dataNascimento: form.dataNascimento,
       };
+
+      if (form.dataNascimento) {
+        payload.dataNascimento = form.dataNascimento;
+      }
 
       const res = await api.put("/perfil", payload);
       const updatedUser = res.data.user;

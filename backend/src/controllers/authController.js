@@ -270,32 +270,39 @@ export async function updateProfile(req, res) {
   try {
     const { nome, email, dataNascimento } = req.body;
     const normalizedNome = String(nome || "").trim();
-    const normalizedEmail = normalizeEmail(email).toLowerCase();
-
-    if (!normalizedNome || !normalizedEmail || !dataNascimento) {
-      return res.status(400).json({ mensagem: "Preencha nome, email e data de nascimento" });
-    }
-
-    const nascimento = new Date(dataNascimento);
-    if (Number.isNaN(nascimento.getTime())) {
-      return res.status(400).json({ mensagem: "Data de nascimento invalida" });
-    }
 
     const currentUser = await findUserById(req.userId);
     if (!currentUser) {
       return res.status(404).json({ mensagem: "Usuario nao encontrado" });
     }
 
-    const userWithEmail = await findUserByEmail(normalizedEmail);
+    const nextNome = normalizedNome || String(currentUser.nome || "").trim();
+    const nextEmail = normalizeEmail(email).toLowerCase() || normalizeEmail(currentUser.email).toLowerCase();
+    const nextDataNascimento = dataNascimento ? new Date(dataNascimento) : currentUser.dataNascimento;
+
+    if (!nextNome || !nextEmail) {
+      return res.status(400).json({ mensagem: "Preencha nome e email" });
+    }
+
+    if (dataNascimento && Number.isNaN(nextDataNascimento.getTime())) {
+      return res.status(400).json({ mensagem: "Data de nascimento invalida" });
+    }
+
+    const userWithEmail = await findUserByEmail(nextEmail);
     if (userWithEmail && String(getUserId(userWithEmail)) !== String(req.userId)) {
       return res.status(400).json({ mensagem: "Email ja esta em uso" });
     }
 
-    const updatedUser = await updateUserProfile(req.userId, {
-      nome: normalizedNome,
-      email: normalizedEmail,
-      dataNascimento: nascimento,
-    });
+    const updates = {
+      nome: nextNome,
+      email: nextEmail,
+    };
+
+    if (dataNascimento || currentUser.dataNascimento) {
+      updates.dataNascimento = nextDataNascimento;
+    }
+
+    const updatedUser = await updateUserProfile(req.userId, updates);
 
     res.json({
       mensagem: "Perfil atualizado com sucesso",
