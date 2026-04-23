@@ -61,11 +61,13 @@ function OpcoesHeader() {
   }
 
   const opcoesNaoLogado = [
+    { label: "Home", path: "/" },
     { label: "Sign up", path: "/cadastre-se" },
     { label: "Login", path: "/login" },
   ];
 
   const opcoesLogado = [
+    { label: "Home", path: "/" },
     { label: "Profile", path: "/perfil" },
     { label: "Calendar", path: "/calendario" },
     { label: "Library", path: "/estante" },
