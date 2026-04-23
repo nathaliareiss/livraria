@@ -50,3 +50,4 @@ npm run build
 
 - Point `REACT_APP_API_URL` to the public API URL in production.
 - Make sure the backend allows the deployed frontend origin through `FRONTEND_URL`.
+- Deploy this folder as the Vercel root directory and keep `vercel.json` for React Router rewrites.

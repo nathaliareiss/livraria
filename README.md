@@ -60,6 +60,23 @@ npm start
 
 The frontend runs on `http://localhost:3000` by default and the backend on `http://localhost:8001`.
 
+## Vercel Deployment
+
+For Vercel, deploy the `frontend/` folder as the project root.
+
+Recommended setup:
+
+1. Import the repository into Vercel.
+2. Set the root directory to `frontend`.
+3. Add the environment variable `REACT_APP_API_URL` pointing to the public backend URL.
+4. Keep the rewrite rule from `frontend/vercel.json` so React Router works on refresh.
+
+Notes:
+
+- Vercel is the best fit for the frontend in this repository.
+- The backend still needs a separate host if you want the full app running in production.
+- After deployment, update the backend CORS `FRONTEND_URL` to the Vercel domain.
+
 ## Environment Variables
 
 ### Backend
