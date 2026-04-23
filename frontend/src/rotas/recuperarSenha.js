@@ -5,38 +5,38 @@ import api from "../servicos/api";
 import { colors } from "../styles/theme";
 import { PageShell, PageSection, SurfaceCard, PrimaryButton, SecondaryButton } from "../componentes/ui";
 
-const Center = styled(PageSection)`
+const Center = styled(PageSection).attrs({ className: "auth-shell" })`
   min-height: calc(100vh - 78px);
   display: grid;
   place-items: center;
   padding: 32px 0 56px;
 `;
 
-const AuthCard = styled(SurfaceCard)`
+const AuthCard = styled(SurfaceCard).attrs({ className: "auth-card" })`
   width: min(100%, 640px);
   padding: 32px;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1.attrs({ className: "auth-title" })`
   margin: 0 0 8px;
   font-size: 34px;
   letter-spacing: -0.04em;
 `;
 
-const Subtitle = styled.p`
+const Subtitle = styled.p.attrs({ className: "auth-subtitle" })`
   margin: 0 0 24px;
   color: ${colors.muted};
   line-height: 1.6;
 `;
 
-const Stepper = styled.div`
+const Stepper = styled.div.attrs({ className: "recovery-stepper" })`
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 24px;
 `;
 
-const Step = styled.div`
+const Step = styled.div.attrs({ className: "recovery-step" })`
   padding: 14px;
   border-radius: 16px;
   border: 1px solid ${(props) => (props.$active ? colors.primary : colors.border)};
@@ -47,7 +47,7 @@ const Step = styled.div`
   line-height: 1.4;
 `;
 
-const StepNumber = styled.div`
+const StepNumber = styled.div.attrs({ className: "recovery-step-number" })`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -61,7 +61,7 @@ const StepNumber = styled.div`
   font-weight: 800;
 `;
 
-const Section = styled.section`
+const Section = styled.section.attrs({ className: "recovery-section" })`
   display: grid;
   gap: 14px;
   padding: 18px;
@@ -70,25 +70,25 @@ const Section = styled.section`
   background: ${colors.surfaceAlt};
 `;
 
-const SectionTitle = styled.h2`
+const SectionTitle = styled.h2.attrs({ className: "recovery-section-title" })`
   margin: 0;
   font-size: 18px;
   letter-spacing: -0.02em;
 `;
 
-const SectionText = styled.p`
+const SectionText = styled.p.attrs({ className: "recovery-section-text" })`
   margin: 0;
   color: ${colors.muted};
   line-height: 1.6;
 `;
 
-const Form = styled.form`
+const Form = styled.form.attrs({ className: "recovery-form" })`
   display: flex;
   flex-direction: column;
   gap: 16px;
 `;
 
-const FieldRow = styled.div`
+const FieldRow = styled.div.attrs({ className: "recovery-field-row" })`
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(${(props) => props.$columns || 1}, minmax(0, 1fr));
@@ -98,7 +98,7 @@ const FieldRow = styled.div`
   }
 `;
 
-const Input = styled.input`
+const Input = styled.input.attrs({ className: "recovery-input" })`
   width: 100%;
   border: 1px solid ${colors.border};
   background: ${colors.surface};
@@ -118,13 +118,13 @@ const Input = styled.input`
   }
 `;
 
-const ErrorText = styled.p`
+const ErrorText = styled.p.attrs({ className: "auth-error" })`
   margin: 0;
   color: ${colors.danger};
   font-size: 14px;
 `;
 
-const BackLink = styled(Link)`
+const BackLink = styled(Link).attrs({ className: "auth-link" })`
   color: ${colors.primaryHover};
   font-size: 14px;
   font-weight: 700;
@@ -135,13 +135,13 @@ const BackLink = styled(Link)`
   }
 `;
 
-const FieldHint = styled.span`
+const FieldHint = styled.span.attrs({ className: "recovery-field-hint" })`
   color: ${colors.muted};
   font-size: 13px;
   line-height: 1.5;
 `;
 
-const MessageArea = styled.div`
+const MessageArea = styled.div.attrs({ className: "recovery-message-area" })`
   margin: 14px 0 4px;
 `;
 

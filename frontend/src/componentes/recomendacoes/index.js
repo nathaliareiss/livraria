@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Titulo } from "../titulo";
 import { colors } from "../../styles/theme";
 
-const Card = styled.div`
+const Card = styled.div.attrs({ className: "recommendation-card" })`
   align-items: center;
   background: ${colors.surface};
   border: 1px solid ${colors.border};
@@ -17,7 +17,7 @@ const Card = styled.div`
   width: 100%;
 `;
 
-const Botao = styled.button`
+const Botao = styled.button.attrs({ className: "recommendation-button" })`
   background-color: ${colors.primary};
   color: #fff;
   padding: 12px 16px;
@@ -36,20 +36,20 @@ const Botao = styled.button`
   }
 `;
 
-const Descricao = styled.p`
+const Descricao = styled.p.attrs({ className: "recommendation-description" })`
   max-width: 340px;
   color: ${colors.muted};
   line-height: 1.6;
 `;
 
-const Subtitulo = styled.h4`
+const Subtitulo = styled.h4.attrs({ className: "recommendation-subtitle" })`
   color: ${colors.text};
   font-size: 18px;
   font-weight: 800;
   margin: 15px 0;
 `;
 
-const ImgLivro = styled.img`
+const ImgLivro = styled.img.attrs({ className: "recommendation-image" })`
   width: 150px;
   border-radius: 16px;
 `;

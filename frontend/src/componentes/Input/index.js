@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../styles/theme";
 
-const Input = styled.input`
+const Input = styled.input.attrs({ className: "form-input" })`
   width: 100%;
   border: 1px solid ${colors.border};
   background: ${colors.surface};

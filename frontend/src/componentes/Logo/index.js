@@ -21,7 +21,7 @@ function Logo() {
   return (
     <LogoContainer>
       <LogoImage src={logo} alt="Livraria" />
-      <p><strong>Livraria</strong></p>
+      <span className="brand-logo-text">Livraria</span>
     </LogoContainer>
   );
 }

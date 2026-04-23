@@ -5,35 +5,35 @@ import { iniciarLeitura, finalizarLeitura } from "../servicos/livros";
 import { PageShell, PageSection, SurfaceCard, PrimaryButton, SecondaryButton } from "../componentes/ui";
 import { colors } from "../styles/theme";
 
-const Wrapper = styled(PageSection)`
+const Wrapper = styled(PageSection).attrs({ className: "library-shell" })`
   padding: 40px 0 56px;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1.attrs({ className: "library-title" })`
   margin: 0 0 28px;
   text-align: center;
   font-size: clamp(30px, 4vw, 44px);
   letter-spacing: -0.04em;
 `;
 
-const Secao = styled.section`
+const Secao = styled.section.attrs({ className: "library-section" })`
   margin-bottom: 40px;
 `;
 
-const SecaoTitulo = styled.h2`
+const SecaoTitulo = styled.h2.attrs({ className: "library-section-title" })`
   color: ${colors.text};
   font-size: 22px;
   margin: 0 0 16px;
   letter-spacing: -0.02em;
 `;
 
-const LivrosGrid = styled.div`
+const LivrosGrid = styled.div.attrs({ className: "library-grid" })`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 18px;
 `;
 
-const LivroCard = styled(SurfaceCard)`
+const LivroCard = styled(SurfaceCard).attrs({ className: "library-card" })`
   padding: 20px;
   text-align: center;
 
@@ -58,7 +58,7 @@ const LivroCard = styled(SurfaceCard)`
   }
 `;
 
-const Empty = styled.p`
+const Empty = styled.p.attrs({ className: "library-empty" })`
   color: ${colors.muted};
   margin: 0;
 `;

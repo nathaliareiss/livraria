@@ -6,11 +6,11 @@ import { useAuth } from "../contextos/AuthContext";
 import { PageShell, PageSection, SurfaceCard, PrimaryButton, SecondaryButton } from "../componentes/ui";
 import { colors } from "../styles/theme";
 
-const Wrapper = styled(PageSection)`
+const Wrapper = styled(PageSection).attrs({ className: "profile-shell" })`
   padding: 40px 0 56px;
 `;
 
-const Layout = styled.div`
+const Layout = styled.div.attrs({ className: "profile-layout" })`
   width: min(100%, 960px);
   margin: 0 auto;
   display: grid;
@@ -22,34 +22,34 @@ const Layout = styled.div`
   }
 `;
 
-const Card = styled(SurfaceCard)`
+const Card = styled(SurfaceCard).attrs({ className: "profile-card" })`
   padding: 32px;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1.attrs({ className: "profile-title" })`
   margin: 0 0 8px;
   font-size: clamp(30px, 4vw, 44px);
   letter-spacing: -0.04em;
 `;
 
-const Subtitle = styled.p`
+const Subtitle = styled.p.attrs({ className: "profile-subtitle" })`
   margin: 0 0 24px;
   color: ${colors.muted};
   line-height: 1.6;
 `;
 
-const SectionTitle = styled.h2`
+const SectionTitle = styled.h2.attrs({ className: "profile-section-title" })`
   margin: 0 0 12px;
   font-size: 18px;
   letter-spacing: -0.02em;
 `;
 
-const Form = styled.form`
+const Form = styled.form.attrs({ className: "profile-form" })`
   display: grid;
   gap: 16px;
 `;
 
-const FieldGrid = styled.div`
+const FieldGrid = styled.div.attrs({ className: "profile-field-grid" })`
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(${(props) => props.$columns || 1}, minmax(0, 1fr));
@@ -59,12 +59,12 @@ const FieldGrid = styled.div`
   }
 `;
 
-const Field = styled.label`
+const Field = styled.label.attrs({ className: "profile-field" })`
   display: grid;
   gap: 8px;
 `;
 
-const Label = styled.span`
+const Label = styled.span.attrs({ className: "profile-label" })`
   font-size: 13px;
   color: ${colors.subtle};
   text-transform: uppercase;
@@ -72,7 +72,7 @@ const Label = styled.span`
   font-weight: 800;
 `;
 
-const Input = styled.input`
+const Input = styled.input.attrs({ className: "profile-input" })`
   width: 100%;
   border: 1px solid ${colors.border};
   background: ${colors.surfaceAlt};
@@ -88,25 +88,25 @@ const Input = styled.input`
   }
 `;
 
-const Message = styled.p`
+const Message = styled.p.attrs({ className: "profile-message" })`
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
   color: ${(props) => (props.$tone === "error" ? colors.danger : colors.success)};
 `;
 
-const Divider = styled.div`
+const Divider = styled.div.attrs({ className: "profile-divider" })`
   height: 1px;
   background: ${colors.border};
   margin: 4px 0;
 `;
 
-const Summary = styled.div`
+const Summary = styled.div.attrs({ className: "profile-summary" })`
   display: grid;
   gap: 16px;
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.div.attrs({ className: "profile-avatar" })`
   width: 72px;
   height: 72px;
   border-radius: 24px;
@@ -119,14 +119,14 @@ const Avatar = styled.div`
   letter-spacing: -0.04em;
 `;
 
-const Stat = styled.div`
+const Stat = styled.div.attrs({ className: "profile-stat" })`
   padding: 16px;
   border-radius: 16px;
   border: 1px solid ${colors.border};
   background: ${colors.surfaceAlt};
 `;
 
-const StatLabel = styled.div`
+const StatLabel = styled.div.attrs({ className: "profile-stat-label" })`
   font-size: 12px;
   color: ${colors.subtle};
   text-transform: uppercase;
@@ -135,13 +135,13 @@ const StatLabel = styled.div`
   margin-bottom: 6px;
 `;
 
-const StatValue = styled.div`
+const StatValue = styled.div.attrs({ className: "profile-stat-value" })`
   font-size: 16px;
   color: ${colors.text};
   word-break: break-word;
 `;
 
-const ButtonRow = styled.div`
+const ButtonRow = styled.div.attrs({ className: "profile-button-row" })`
   display: flex;
   flex-wrap: wrap;
   gap: 12px;

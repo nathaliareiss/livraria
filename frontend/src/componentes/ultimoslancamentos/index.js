@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../styles/theme";
 
-const LivrosContainer = styled.div`
+const LivrosContainer = styled.div.attrs({ className: "book-grid" })`
   width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
   display: grid;
@@ -10,7 +10,7 @@ const LivrosContainer = styled.div`
   padding: 24px 0 56px;
 `;
 
-const LivroCard = styled.div`
+const LivroCard = styled.div.attrs({ className: "book-card" })`
   background: ${colors.surface};
   border: 1px solid ${colors.border};
   border-radius: 22px;
@@ -40,14 +40,14 @@ const LivroCard = styled.div`
   }
 `;
 
-const BotoesContainer = styled.div`
+const BotoesContainer = styled.div.attrs({ className: "book-actions" })`
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 15px;
 `;
 
-const Botao = styled.button`
+const Botao = styled.button.attrs({ className: "book-action-button" })`
   background-color: ${colors.surfaceAlt};
   color: ${colors.text};
   border: 1px solid ${colors.border};
@@ -69,14 +69,14 @@ const Botao = styled.button`
   }
 `;
 
-const ButtonContent = styled.span`
+const ButtonContent = styled.span.attrs({ className: "book-action-content" })`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 `;
 
-const SuccessBadge = styled.span`
+const SuccessBadge = styled.span.attrs({ className: "book-action-badge" })`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -88,7 +88,7 @@ const SuccessBadge = styled.span`
   box-shadow: 0 0 0 4px rgba(21, 128, 61, 0.12);
 `;
 
-const SuccessLabel = styled.span`
+const SuccessLabel = styled.span.attrs({ className: "book-action-label" })`
   color: ${colors.success};
 `;
 

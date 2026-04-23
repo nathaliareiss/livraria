@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../styles/theme";
 
-export const Titulo = styled.h2`
+export const Titulo = styled.h2.attrs({ className: "section-title" })`
   width: 100%;
   margin: 0;
   padding: 0;

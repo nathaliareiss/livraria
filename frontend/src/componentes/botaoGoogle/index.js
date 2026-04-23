@@ -2,7 +2,7 @@ import styled from "styled-components";
 import api from "../../servicos/api";
 import { colors } from "../../styles/theme";
 
-const Button = styled.button`
+const Button = styled.button.attrs({ className: "calendar-google-button" })`
   border: 1px solid ${colors.border};
   background: ${colors.surface};
   color: ${colors.text};

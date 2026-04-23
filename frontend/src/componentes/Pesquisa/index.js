@@ -4,11 +4,11 @@ import { useState } from "react";
 import { colors } from "../../styles/theme";
 import { PageSection } from "../ui";
 
-const PesquisaContainer = styled.section`
+const PesquisaContainer = styled.section.attrs({ className: "hero-section" })`
   padding: 28px 0 16px;
 `;
 
-const Hero = styled(PageSection)`
+const Hero = styled(PageSection).attrs({ className: "hero-card" })`
   padding: 40px;
   border-radius: 28px;
   background: linear-gradient(135deg, ${colors.surfaceDark} 0%, ${colors.surfaceDarkAlt} 100%);
@@ -17,14 +17,14 @@ const Hero = styled(PageSection)`
   text-align: center;
 `;
 
-const Titulo = styled.h2`
+const Titulo = styled.h2.attrs({ className: "hero-title" })`
   margin: 0 0 12px;
   color: #fff;
   font-size: clamp(32px, 4vw, 52px);
   letter-spacing: -0.04em;
 `;
 
-const Subtitulo = styled.h3`
+const Subtitulo = styled.h3.attrs({ className: "hero-subtitle" })`
   margin: 0 0 28px;
   max-width: 680px;
   margin-left: auto;
@@ -35,12 +35,12 @@ const Subtitulo = styled.h3`
   line-height: 1.6;
 `;
 
-const SearchBar = styled.div`
+const SearchBar = styled.div.attrs({ className: "hero-searchbar" })`
   display: flex;
   justify-content: center;
 `;
 
-const Form = styled.form`
+const Form = styled.form.attrs({ className: "hero-search-form" })`
   display: flex;
   gap: 12px;
   width: min(100%, 680px);
@@ -48,7 +48,7 @@ const Form = styled.form`
   align-items: center;
 `;
 
-const SearchButton = styled.button`
+const SearchButton = styled.button.attrs({ className: "hero-search-button" })`
   background-color: ${colors.primary};
   color: #fff;
   border: 1px solid transparent;

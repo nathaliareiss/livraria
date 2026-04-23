@@ -5,24 +5,24 @@ import livroImg from "../componentes/imagens/livro.png";
 import { PageShell, PageSection, SurfaceCard, SecondaryButton } from "../componentes/ui";
 import { colors } from "../styles/theme";
 
-const Wrapper = styled(PageSection)`
+const Wrapper = styled(PageSection).attrs({ className: "favorites-shell" })`
   padding: 40px 0 56px;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1.attrs({ className: "favorites-title" })`
   margin: 0 0 28px;
   text-align: center;
   font-size: clamp(30px, 4vw, 44px);
   letter-spacing: -0.04em;
 `;
 
-const ResultadoContainer = styled.div`
+const ResultadoContainer = styled.div.attrs({ className: "favorites-grid" })`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 18px;
 `;
 
-const Resultado = styled(SurfaceCard)`
+const Resultado = styled(SurfaceCard).attrs({ className: "favorites-card" })`
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -31,14 +31,14 @@ const Resultado = styled(SurfaceCard)`
   color: ${colors.text};
 `;
 
-const Capa = styled.img`
+const Capa = styled.img.attrs({ className: "favorites-cover" })`
   width: 100%;
   height: 260px;
   object-fit: cover;
   border-radius: 16px;
 `;
 
-const Empty = styled(SurfaceCard)`
+const Empty = styled(SurfaceCard).attrs({ className: "favorites-empty" })`
   padding: 28px;
   text-align: center;
   color: ${colors.muted};

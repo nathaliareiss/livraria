@@ -7,37 +7,37 @@ import api from "../servicos/api";
 import { colors } from "../styles/theme";
 import { PageShell, PageSection, SurfaceCard, PrimaryButton } from "../componentes/ui";
 
-const Center = styled(PageSection)`
+const Center = styled(PageSection).attrs({ className: "auth-shell" })`
   min-height: calc(100vh - 78px);
   display: grid;
   place-items: center;
   padding: 32px 0 56px;
 `;
 
-const AuthCard = styled(SurfaceCard)`
+const AuthCard = styled(SurfaceCard).attrs({ className: "auth-card" })`
   width: min(100%, 460px);
   padding: 32px;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1.attrs({ className: "auth-title" })`
   margin: 0 0 8px;
   font-size: 34px;
   letter-spacing: -0.04em;
 `;
 
-const Subtitle = styled.p`
+const Subtitle = styled.p.attrs({ className: "auth-subtitle" })`
   margin: 0 0 28px;
   color: ${colors.muted};
   line-height: 1.6;
 `;
 
-const Form = styled.form`
+const Form = styled.form.attrs({ className: "auth-form" })`
   display: flex;
   flex-direction: column;
   gap: 16px;
 `;
 
-const Input = styled.input`
+const Input = styled.input.attrs({ className: "auth-input" })`
   width: 100%;
   border: 1px solid ${colors.border};
   background: ${colors.surfaceAlt};
@@ -57,13 +57,13 @@ const Input = styled.input`
   }
 `;
 
-const ErrorText = styled.p`
+const ErrorText = styled.p.attrs({ className: "auth-error" })`
   margin: 0;
   color: ${colors.danger};
   font-size: 14px;
 `;
 
-const RecoveryLink = styled(Link)`
+const RecoveryLink = styled(Link).attrs({ className: "auth-link" })`
   align-self: flex-start;
   color: ${colors.primaryHover};
   font-size: 14px;

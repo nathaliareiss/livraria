@@ -6,18 +6,18 @@ import ConectarGoogle from "../componentes/botaoGoogle";
 import { PageShell, PageSection, SurfaceCard, PrimaryButton } from "../componentes/ui";
 import { colors } from "../styles/theme";
 
-const Wrapper = styled(PageSection)`
+const Wrapper = styled(PageSection).attrs({ className: "calendar-shell" })`
   padding: 40px 0 56px;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1.attrs({ className: "calendar-title" })`
   margin: 0 0 20px;
   text-align: center;
   font-size: clamp(30px, 4vw, 44px);
   letter-spacing: -0.04em;
 `;
 
-const Actions = styled.div`
+const Actions = styled.div.attrs({ className: "calendar-actions" })`
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -25,12 +25,12 @@ const Actions = styled.div`
   flex-wrap: wrap;
 `;
 
-const Card = styled(SurfaceCard)`
+const Card = styled(SurfaceCard).attrs({ className: "calendar-card" })`
   padding: 24px;
   margin-bottom: 24px;
 `;
 
-const Input = styled.input`
+const Input = styled.input.attrs({ className: "calendar-input" })`
   width: 100%;
   margin-bottom: 12px;
   padding: 14px 16px;
@@ -46,21 +46,21 @@ const Input = styled.input`
   }
 `;
 
-const EventosGrid = styled.div`
+const EventosGrid = styled.div.attrs({ className: "calendar-grid" })`
   display: grid;
   gap: 16px;
 `;
 
-const EventoCard = styled(SurfaceCard)`
+const EventoCard = styled(SurfaceCard).attrs({ className: "calendar-event-card" })`
   padding: 18px;
 `;
 
-const EventTitle = styled.h3`
+const EventTitle = styled.h3.attrs({ className: "calendar-event-title" })`
   margin: 0 0 8px;
   font-size: 18px;
 `;
 
-const Meta = styled.p`
+const Meta = styled.p.attrs({ className: "calendar-event-meta" })`
   margin: 0 0 6px;
   color: ${colors.muted};
 `;
