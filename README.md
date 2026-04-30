@@ -25,14 +25,6 @@ Livraria is a polished full-stack book management app built with React, Node.js,
 - `frontend/` - web interface, routing, and app state
 - `.github/workflows/ci.yml` - automated lint/build checks
 
-## Screenshots
-
-Add a few captures here when publishing the project on GitHub. The most useful ones are:
-
-- Home page
-- Login and registration
-- Profile editor
-- Library or favorites view
 
 ## Getting Started
 
